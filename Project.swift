@@ -91,7 +91,7 @@ let targets = [
         bundleId: "com.Marker.AnchorKit",
         deploymentTarget: .iOS(targetVersion: "13.1", devices: [.iphone]),
         infoPlist: .extendingDefault(with: [:]),
-        sources: ["Targets/AnchorKit/**"],
+        sources: ["Targets/AnchorKit/Sources/**"],
         resources: [
             "Targets/DesignKit/Resources/**"
         ],
