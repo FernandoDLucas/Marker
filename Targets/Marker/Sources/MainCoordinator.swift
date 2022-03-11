@@ -2,8 +2,8 @@
 //  MainCoordinator.swift
 //  Marker
 //
-//  Created by Fernando de Lucas da Silva Gomes on 13/12/21.
-//  Copyright © 2021 Marker. All rights reserved.
+//  Created by Fernando de Lucas da Silva Gomes on 13/03/22.
+//  Copyright © 2022 Marker. All rights reserved.
 //
 
 import UIKit
