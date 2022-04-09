@@ -1,15 +1,6 @@
 import ProjectDescription
 import ProjectDescriptionHelpers
 
-// MARK: - Project
-
-// Creates our project using a helper function defined in ProjectDescriptionHelpers
-
-let infoPlist: [String: InfoPlist.Value] = [
-    "UILaunchScreen": [:],
-    "CFBundleShortVersionString": "1.3",
-    "CFBundleVersion": "1.0"
-]
 
 let targets = [
     Target(
@@ -21,11 +12,12 @@ let targets = [
         infoPlist: .extendingDefault(with: [:]),
         sources: ["Sources/**"],
         resources: [
-            "Resources/**"
+            
         ],
         dependencies: [
 
-        ]
+        ],
+        coreDataModels: [CoreDataModel(Path.relativeToManifest("Resources/Marker.xcdatamodeld"))]
     ),
     Target(
         name: "NetworkingKitTests",
@@ -42,7 +34,7 @@ let targets = [
 ]
 
 let project = Project(
-    name: "Marker",
+    name: "NetworkingKit",
     organizationName: "Marker",
     packages: [],
     targets: targets

@@ -23,9 +23,7 @@ let targets = [
         resources: [
             "Marker/Resources/**",
         ],
-        actions: [.post(script: "scripts/swiftlint.sh", name: "SwiftLint")],
-        dependencies: [
-        ]
+        dependencies: DependenciesManager.projectDependencies
     ),
     Target(
         name: "MarkerTests",
