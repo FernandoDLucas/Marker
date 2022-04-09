@@ -1,26 +1,25 @@
 import CoreData
 
-class NKLocalPersistenceService<T: NSManagedObject> {
+final class NKLocalPersistenceService<T: NSManagedObject> {
 
     typealias SingleResultHandler = Result<T, NKLocalPersistenceServiceError>
     typealias MultiResultHandler = Result<[T], NKLocalPersistenceServiceError>
 
+    private let persistentContainer: NSPersistentContainer
+    private let context: NSManagedObjectContext
+    
     init(container: NSPersistentContainer) {
         self.persistentContainer = container
         self.context = persistentContainer.viewContext
     }
 
-    let persistentContainer: NSPersistentContainer
-
-    let context: NSManagedObjectContext
-
-    func newObject() -> SingleResultHandler {
+    func createNewObject() -> SingleResultHandler {
         guard let entity = NSEntityDescription.entity(forEntityName: T.entityName, in: context)
         else { return .failure(NKLocalPersistenceServiceError(.inconsistenceOnContext)) }
         return .success(T(entity: entity, insertInto: context))
     }
 
-    func delete(object: T) -> SingleResultHandler {
+    func deleteObject(_ object: T) -> SingleResultHandler {
         context.delete(object)
         do {
             try context.save()
@@ -44,11 +43,8 @@ class NKLocalPersistenceService<T: NSManagedObject> {
         }
     }
 
-    func retrive(predicate: NSPredicate, keyForDescriptor: String) -> SingleResultHandler {
-        let fetch = NSFetchRequest<T>(entityName: T.entityName)
-        fetch.sortDescriptors = [NSSortDescriptor(key: keyForDescriptor, ascending: true)]
-        fetch.predicate  = predicate
-        fetch.fetchLimit = 1
+    func retrive(_ keySearch: NKKeySearch) -> SingleResultHandler {
+        let fetch = prepareForFetch(keySearch)
         do {
             guard let object = try context.fetch(fetch).first else {
                 return .failure(NKLocalPersistenceServiceError(.failToFetch))
@@ -58,22 +54,13 @@ class NKLocalPersistenceService<T: NSManagedObject> {
             return .failure(NKLocalPersistenceServiceError(.failToFetch, underlyingError: error))
         }
     }
-}
-
-public struct NKLocalPersistenceServiceError: Error {
-
-    let errorType: ErrorType
-    let underlyingError: Error?
-
-    init(_ errorType: ErrorType, underlyingError: Error? = nil) {
-        self.errorType = errorType
-        self.underlyingError = underlyingError
-    }
-
-    enum ErrorType {
-        case inconsistenceOnContext
-        case failToSaveContext
-        case failToFetch
+    
+    private func prepareForFetch(_ keySearch: NKKeySearch) -> NSFetchRequest<T>{
+        let request = NSFetchRequest<T>(entityName: T.entityName)
+        request.sortDescriptors = [NSSortDescriptor(key: keySearch.descriptor, ascending: true)]
+        request.predicate  = keySearch.predicate
+        request.fetchLimit = keySearch.fetchLimit
+        return request
     }
 }
 
