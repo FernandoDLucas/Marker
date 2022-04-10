@@ -8,11 +8,15 @@
 
 import CoreData
 
-public final class NKLocalPersistenceConfigurator{
+public final class NKLocalPersistenceResolver{
     
-    private let container = NSPersistentContainer(name: "Marker")
+    private let container: NSPersistentContainer
+    
+    public static let shared = NKLocalPersistenceResolver()
 
-    public init() {}
+    public init() {
+        container = CoreDataStack().persistentContainer
+    }
 
     public func execute() -> NKComicRepository{
         let service = NKLocalPersistenceService<Comic>(container: container)

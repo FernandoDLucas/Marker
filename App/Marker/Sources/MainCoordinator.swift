@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 protocol Coordinator {
     func start(window: UIWindow?)

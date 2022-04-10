@@ -2,56 +2,61 @@ import CoreData
 
 final class NKLocalPersistenceService<T: NSManagedObject> {
 
-    typealias SingleResultHandler = Result<T, NKLocalPersistenceServiceError>
-    typealias MultiResultHandler = Result<[T], NKLocalPersistenceServiceError>
 
     private let persistentContainer: NSPersistentContainer
     private let context: NSManagedObjectContext
     
     init(container: NSPersistentContainer) {
         self.persistentContainer = container
-        self.context = persistentContainer.viewContext
+        self.context = container.viewContext
     }
 
-    func createNewObject() -> SingleResultHandler {
-        guard let entity = NSEntityDescription.entity(forEntityName: T.entityName, in: context)
-        else { return .failure(NKLocalPersistenceServiceError(.inconsistenceOnContext)) }
-        return .success(T(entity: entity, insertInto: context))
+    func createNewObject() throws -> T{
+        guard let entity = NSEntityDescription.entity(
+            forEntityName: T.entityName,
+            in: context
+        )
+        else { throw NKLocalPersistenceServiceError(.inconsistenceOnContext) }
+        return T(entity: entity, insertInto: context)
     }
 
-    func deleteObject(_ object: T) -> SingleResultHandler {
+    func deleteObject(_ object: T) throws -> T {
         context.delete(object)
         do {
             try context.save()
-            return .success(object)
+            return object
         } catch let error {
-            return .failure(NKLocalPersistenceServiceError(.failToFetch, underlyingError: error))
+            throw NKLocalPersistenceServiceError(.failToFetch, underlyingError: error)
         }
     }
 
     func reset() {
         context.reset()
     }
+    
+    func save() throws {
+        try context.save()
+    }
 
-    func retriveAll() -> MultiResultHandler {
+    func retriveAll() throws -> [T] {
         let fetch = NSFetchRequest<T>(entityName: T.entityName)
         do {
             let objects = try context.fetch(fetch)
-            return .success(objects)
+            return objects
         } catch let error {
-            return .failure(NKLocalPersistenceServiceError(.failToFetch, underlyingError: error))
+            throw NKLocalPersistenceServiceError(.failToFetch, underlyingError: error)
         }
     }
 
-    func retrive(_ keySearch: NKKeySearch) -> SingleResultHandler {
+    func retrive(_ keySearch: NKKeySearch) throws -> T {
         let fetch = prepareForFetch(keySearch)
         do {
             guard let object = try context.fetch(fetch).first else {
-                return .failure(NKLocalPersistenceServiceError(.failToFetch))
+                throw NKLocalPersistenceServiceError(.failToFetch)
             }
-            return .success(object)
+            return object
         } catch let error {
-            return .failure(NKLocalPersistenceServiceError(.failToFetch, underlyingError: error))
+            throw NKLocalPersistenceServiceError(.failToFetch, underlyingError: error)
         }
     }
     

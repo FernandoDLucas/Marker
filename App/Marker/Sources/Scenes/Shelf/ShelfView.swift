@@ -10,17 +10,16 @@ import UIKit
 import AnchorKit
 import DesignKit
 import Strategy
+import NetworkingKit
 
 class ShelfView: UIView {
     
     private lazy var segmentedControl: DKSegmentedControl = {
         let segmentedControl = DKSegmentedControl(items: ["Lido", "Lendo", "Para Ler"])
-        segmentedControl.setBackgroundImage(UIImage(ciImage: .clear), for: .normal, barMetrics: .default)
-        segmentedControl.selectedSegmentIndex = 0
         segmentedControl.addTarget(self, action: #selector(segmentedControlValueChanged), for: .valueChanged)
         return segmentedControl
     }()
-    
+        
     init() {
         super.init(frame: .zero)
         setupView()

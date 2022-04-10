@@ -23,6 +23,8 @@ public final class DKSegmentedControl: UISegmentedControl {
     override public init(items: [Any]?){
         super.init(items: items)
         self.translatesAutoresizingMaskIntoConstraints = false
+        self.setBackgroundImage(UIImage(ciImage: .clear), for: .normal, barMetrics: .default)
+        self.selectedSegmentIndex = 0
         configureColors()
         setupView()
     }
@@ -53,7 +55,6 @@ public final class DKSegmentedControl: UISegmentedControl {
         configureColors()
     }
 
-    
 }
 
 extension DKSegmentedControl: ViewCode {
