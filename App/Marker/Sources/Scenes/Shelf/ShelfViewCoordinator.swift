@@ -19,6 +19,8 @@ public final class ShelfViewCoordinator: Navigator, ShelfViewCoordinatorProtocol
 
     init() {}
 
-    func callAddScreen(){}
+    func callAddScreen(){
+        
+    }
 
 }

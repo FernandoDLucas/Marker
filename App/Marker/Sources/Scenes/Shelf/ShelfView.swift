@@ -12,7 +12,11 @@ import DesignKit
 import Strategy
 import NetworkingKit
 
-final class ShelfView: UIView {
+protocol ShelfViewProtocol: UIView {}
+
+protocol ShelfViewDelegate: AnyObject {}
+
+final class ShelfView: UIView, ShelfViewProtocol {
     
     private lazy var segmentedControl: DKSegmentedControl = {
         let segmentedControl = DKSegmentedControl(items: ["Lido", "Lendo", "Para Ler"])
@@ -21,7 +25,9 @@ final class ShelfView: UIView {
     }()
     private let viewModel: ShelfCollectionViewModelProtocol
     private let collectionView = ShelfCollectionView()
-        
+    weak var navigationItem: UINavigationItem?
+    weak var delegate: ShelfViewDelegate?
+
     init(
         ViewModel: ShelfCollectionViewModelProtocol
     ) {
@@ -68,5 +74,30 @@ extension ShelfView: ViewCode {
 extension ShelfView: ShelfCollectionViewModelDelegate {
     func handleUpdate() {
         self.collectionView.reloadData()
+    }
+}
+
+extension UIViewController {
+    public func setupNavigationBar(
+        title: String? = nil,
+        navColor: UIColor?,
+        barColor: UIColor?
+    ) {
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
+        navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.isTranslucent = false
+
+            let appearance = UINavigationBarAppearance()
+            appearance.configureWithOpaqueBackground()
+            appearance.backgroundColor = navColor
+            appearance.shadowImage = UIImage()
+            appearance.shadowColor = .clear
+
+            appearance.titleTextAttributes = [
+                .foregroundColor: barColor as Any
+            ]
+
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
     }
 }

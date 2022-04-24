@@ -10,7 +10,7 @@ import UIKit
 
 class ShelfViewController: UIViewController {
 
-    typealias CustomView = ShelfView
+    typealias CustomView = ShelfViewProtocol
     private let customView: CustomView
     private let coordinator: ShelfViewCoordinatorProtocol
 
@@ -32,21 +32,17 @@ class ShelfViewController: UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .systemBackground
         self.title = "Marker"
-    }
-
-    func addNavigationButton() {
-        self.navigationController?.navigationBar.topItem?.rightBarButtonItem = .init(
+        self.setupNavigationBar(navColor: .clear, barColor: .black)
+        self.navigationItem.rightBarButtonItem = .init(
             barButtonSystemItem: .add,
             target: self,
-            action: #selector(addButtonClicked)
+            action: #selector(callAdd)
         )
     }
     
-    @objc func addButtonClicked() {
-        self.coordinator.callAddScreen()
+    @objc
+    func callAdd() {
+        coordinator.callAddScreen()
     }
-    
-    
 }
