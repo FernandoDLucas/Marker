@@ -14,7 +14,8 @@ let targets = [
             "Resources/**"
         ],
         dependencies: [
-            .project(target: "Strategy", path: "../Strategy")
+            .project(target: "Strategy", path: "../Strategy"),
+            .project(target: "AnchorKit", path: "../AnchorKit")
         ]
     )
 ]

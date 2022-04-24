@@ -9,6 +9,6 @@
 import Foundation
 import UIKit
 
-final class AddItemViewController: UIViewController {
+final class EditItemViewController: UIViewController {
     
 }

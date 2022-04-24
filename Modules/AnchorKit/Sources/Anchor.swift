@@ -77,6 +77,12 @@ extension Anchor {
         self.anchor(\.trailingAnchor, on: referenceView, equal: \.trailingAnchor, constant: -padding)
     }
     
+    public func anchorToVerticalEdges<S>(of referenceView: S, withSpace padding: CGFloat = 0) where S: UIView {
+        prepareForLayout()
+        self.anchor(\.topAnchor, on: referenceView, equal: \.topAnchor, constant: padding)
+        self.anchor(\.bottomAnchor, on: referenceView, equal: \.bottomAnchor, constant: -padding)
+    }
+    
     public func anchorToTop<S>(of referenceView: S) where S: UILayoutGuide{
         prepareForLayout()
         self.anchor(\.topAnchor, on: referenceView, equal: \.topAnchor)
@@ -90,6 +96,16 @@ extension Anchor {
     public func anchorTopToBottom<S>(of referenceView: S) where S: UIView{
         prepareForLayout()
         self.anchor(\.topAnchor, on: referenceView, equal: \.bottomAnchor)
+    }
+
+    public func anchorToLeading<S>(of referenceView: S) where S: UIView{
+        prepareForLayout()
+        self.anchor(\.leadingAnchor, on: referenceView, equal: \.leadingAnchor)
+    }
+
+    public func anchorToTrailing<S>(of referenceView: S) where S: UIView{
+        prepareForLayout()
+        self.anchor(\.leadingAnchor, on: referenceView, equal: \.leadingAnchor)
     }
     
     public func anchorWidth<S>(
