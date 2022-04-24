@@ -82,6 +82,16 @@ extension Anchor {
         self.anchor(\.topAnchor, on: referenceView, equal: \.topAnchor)
     }
     
+    public func anchorToBottom<S>(of referenceView: S) where S: UILayoutGuide{
+        prepareForLayout()
+        self.anchor(\.bottomAnchor, on: referenceView, equal: \.bottomAnchor)
+    }
+    
+    public func anchorTopToBottom<S>(of referenceView: S) where S: UIView{
+        prepareForLayout()
+        self.anchor(\.topAnchor, on: referenceView, equal: \.bottomAnchor)
+    }
+    
     public func anchorWidth<S>(
         basedOn referenceView: S,
         withSize size: CGFloat

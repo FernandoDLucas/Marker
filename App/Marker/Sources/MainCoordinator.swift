@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import NetworkingKit
 
 protocol Coordinator {
     func start(window: UIWindow?)
@@ -15,16 +16,25 @@ protocol Coordinator {
 
 final class MainCoordinator: Coordinator {
 
-    var initialController: ShelfViewController
+    typealias InitialController = ShelfViewController
 
-    init() {
-        self.initialController = ShelfViewController()
-    }
+    init() {}
 
     func start(window: UIWindow?) {
+        let initialController = resolveInitialController()
         let navigationController = UINavigationController(rootViewController: initialController)
         navigationController.view.backgroundColor = .white
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
+    }
+    
+    func resolveInitialController() -> InitialController {
+        let repository = NKLocalPersistenceResolver().createComicRepository()
+        let viewModel = ShelfCollectionViewModel(repository: repository)
+        let view = ShelfView(ViewModel: viewModel)
+        let coordinator = ShelfViewCoordinator()
+        let controller = ShelfViewController(customView: view, coordinator: coordinator)
+        coordinator.viewController = controller
+        return controller
     }
 }

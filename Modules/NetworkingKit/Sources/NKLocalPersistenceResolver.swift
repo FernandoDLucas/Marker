@@ -18,7 +18,7 @@ public final class NKLocalPersistenceResolver{
         container = CoreDataStack().persistentContainer
     }
 
-    public func execute() -> NKComicRepository{
+    public func createComicRepository() -> NKComicRepository{
         let service = NKLocalPersistenceService<Comic>(container: container)
         return .init(service: service)
     }

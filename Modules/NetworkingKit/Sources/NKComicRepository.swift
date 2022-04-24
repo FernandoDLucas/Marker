@@ -9,7 +9,11 @@
 import Foundation
 import CoreData
 
-public final class NKComicRepository{
+public protocol NKComicRepositoryProtocol {
+    func retrieveAll() throws -> [Comic]
+}
+
+public final class NKComicRepository: NKComicRepositoryProtocol{
     
     private let service: NKLocalPersistenceService<Comic>
 

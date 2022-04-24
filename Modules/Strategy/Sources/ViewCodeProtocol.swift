@@ -8,7 +8,7 @@
 
 import UIKit
 
-public protocol ViewCode {
+public protocol ViewCode: UIView {
     func setupViewHierarchy()
     func setupConstraints()
 }
@@ -17,5 +17,11 @@ extension ViewCode {
     public func setupView() {
         setupViewHierarchy()
         setupConstraints()
+    }
+    
+    public func addSubViews(_ views: [UIView]) {
+        views.forEach {
+            self.addSubview($0)
+        }
     }
 }
