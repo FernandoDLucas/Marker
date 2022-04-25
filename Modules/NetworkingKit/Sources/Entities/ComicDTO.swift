@@ -18,12 +18,14 @@ public struct ComicDTO {
     public var organizedBy: Int
     
     
-    public static func fixture() -> Self{
+    public static func fixture(
+        cover: Data? = nil 
+    ) -> Self{
         return .init(
             currentProgress: 12,
             author: "Teste",
             total: 15,
-            cover: nil,
+            cover: cover,
             title: "Teste",
             status: 1,
             organizedBy: 1

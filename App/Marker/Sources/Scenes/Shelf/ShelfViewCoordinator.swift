@@ -20,7 +20,9 @@ public final class ShelfViewCoordinator: Navigator, ShelfViewCoordinatorProtocol
     init() {}
 
     func callAddScreen(){
-        
+        let view = EditItemView()
+        let controller = EditItemViewController(view: view)
+        viewController?.navigationController?.pushViewController(controller, animated: true)
     }
 
 }

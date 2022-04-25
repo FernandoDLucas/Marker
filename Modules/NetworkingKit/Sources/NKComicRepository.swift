@@ -11,6 +11,9 @@ import CoreData
 
 public protocol NKComicRepositoryProtocol {
     func retrieveAll() throws -> [Comic]
+    func create(
+        _ comicDTO: ComicDTO
+    ) throws -> Comic
 }
 
 public final class NKComicRepository: NKComicRepositoryProtocol{

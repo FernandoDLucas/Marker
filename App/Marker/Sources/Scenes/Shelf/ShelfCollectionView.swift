@@ -17,7 +17,7 @@ class ShelfCollectionView: UICollectionView {
     ) {
         layout.scrollDirection = .vertical
         super.init(frame: .zero, collectionViewLayout: layout)
-        self.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
+        self.register(ShelfCollectionViewCell.self, forCellWithReuseIdentifier: ShelfCollectionViewCell.reuseIdentifier)
         self.backgroundColor = .clear
         self.showsHorizontalScrollIndicator = false
         self.showsVerticalScrollIndicator = false
