@@ -22,19 +22,24 @@ public final class DKTextField: UIView {
     private lazy var textField: UITextField = {
         let textField = UITextField()
         textField.font = .systemFont(ofSize: 12)
+        textField.textAlignment = .right
         return textField
     }()
-
+    
+    public var text: String? {
+        self.textField.text
+    }
+    
     public init(
         viewModel: DSTextFieldViewModel
     ) {
         super.init(frame: .zero)
-        self.backgroundColor = .gray
+        self.backgroundColor = .systemBackground
         configure(with: viewModel)
         setupView()
-        self.addBottomBorder(of: 1)
     }
     
+    @available (*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -50,6 +55,7 @@ extension DKTextField: ViewCode {
             label,
             textField
         ])
+        self.addBottomBorder(of: 1)
     }
     
     public func setupConstraints() {
@@ -60,13 +66,13 @@ extension DKTextField: ViewCode {
     private func buildLabel() {
         label.anchorToVerticalEdges(of: self)
         label.anchorToLeading(of: self)
-        label.anchorWidth(basedOn: self, withSize: 0.5)
+        label.anchorWidth(basedOn: self, withSize: 0.2)
     }
     
     private func buildTextField() {
         textField.anchorToVerticalEdges(of: self)
         textField.anchorToTrailing(of: self)
-        textField.anchorWidth(basedOn: self, withSize: 0.5)
+        textField.anchorWidth(basedOn: self, withSize: 0.8)
     }
 }
 
@@ -78,8 +84,4 @@ public struct DSTextFieldViewModel {
      ) {
         self.title = title
     }
-}
-
-enum DKTextFieldType{
-    case input, stepper
 }

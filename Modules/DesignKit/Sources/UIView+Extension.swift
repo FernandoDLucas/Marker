@@ -17,8 +17,17 @@ extension UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
          
         view.anchorToHorizontalEdges(of: self)
-        view.anchorToLeading(of: self)
+        view.anchorToBottom(of: self)
         view.anchorHeight(withSize: size)
+    }
+    
+    public func addTapAction(
+        on target: Any?,
+        execute action: Selector
+    ) {
+        self.isUserInteractionEnabled = true
+        let gesture = UITapGestureRecognizer(target: target, action: action)
+        self.addGestureRecognizer(gesture)
     }
 }
 

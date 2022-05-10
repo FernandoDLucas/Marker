@@ -93,6 +93,16 @@ extension Anchor {
         self.anchor(\.bottomAnchor, on: referenceView, equal: \.bottomAnchor)
     }
     
+    public func anchorToTop<S>(of referenceView: S) where S: UIView{
+        prepareForLayout()
+        self.anchor(\.topAnchor, on: referenceView, equal: \.topAnchor)
+    }
+    
+    public func anchorToBottom<S>(of referenceView: S) where S: UIView{
+        prepareForLayout()
+        self.anchor(\.bottomAnchor, on: referenceView, equal: \.bottomAnchor)
+    }
+    
     public func anchorTopToBottom<S>(of referenceView: S) where S: UIView{
         prepareForLayout()
         self.anchor(\.topAnchor, on: referenceView, equal: \.bottomAnchor)
@@ -102,10 +112,20 @@ extension Anchor {
         prepareForLayout()
         self.anchor(\.leadingAnchor, on: referenceView, equal: \.leadingAnchor)
     }
+    
+    public func anchorLeadingToTrailing<S>(of referenceView: S) where S: UIView{
+        prepareForLayout()
+        self.anchor(\.leadingAnchor, on: referenceView, equal: \.trailingAnchor)
+    }
+    
+    public func anchorTrailingToLeading<S>(of referenceView: S) where S: UIView{
+        prepareForLayout()
+        self.anchor(\.trailingAnchor, on: referenceView, equal: \.leadingAnchor)
+    }
 
     public func anchorToTrailing<S>(of referenceView: S) where S: UIView{
         prepareForLayout()
-        self.anchor(\.leadingAnchor, on: referenceView, equal: \.leadingAnchor)
+        self.anchor(\.trailingAnchor, on: referenceView, equal: \.trailingAnchor)
     }
     
     public func anchorWidth<S>(
