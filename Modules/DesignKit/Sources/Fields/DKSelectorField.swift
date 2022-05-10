@@ -24,13 +24,15 @@ public final class DKSelectorField: UIView {
         public init(
             title: String,
             value: String,
-            imageAcessory: UIImage?
+            imageAcessory: UIImage? = UIImage(systemName: "chevron.right")
         ) {
             self.title = title
             self.value = value
             self.imageAcessory = imageAcessory
         }
     }
+    
+    public var delegate: DKSelectorFieldDelegate?
 
     private lazy var identifierLabel: UILabel = {
        let label = UILabel()
@@ -57,6 +59,7 @@ public final class DKSelectorField: UIView {
     public init(viewModel: ViewModel) {
         super.init(frame: .zero)
         setupView()
+        setupActions()
         configure(with: viewModel)
     }
     
@@ -88,6 +91,13 @@ extension DKSelectorField: ViewCode {
         setupValue()
     }
     
+    func setupActions() {
+        self.addTapAction(
+            on: self,
+            execute: #selector(didSelect)
+        )
+    }
+    
     private func setupIdentifier() {
         identifierLabel.anchorToVerticalEdges(of: self)
         identifierLabel.anchorToLeading(of: self)
@@ -105,5 +115,10 @@ extension DKSelectorField: ViewCode {
         valueLabel.anchorToVerticalEdges(of: self)
         valueLabel.anchorTrailingToLeading(of: imageAcessory)
         valueLabel.anchorWidth(basedOn: self, withSize: 0.35)
+    }
+    
+    @objc
+    func didSelect() {
+        delegate?.didSelectField()
     }
 }

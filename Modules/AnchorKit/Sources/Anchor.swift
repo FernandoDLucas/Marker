@@ -13,6 +13,11 @@ public protocol Anchor: UIView {}
 extension UIView: Anchor {}
 
 extension Anchor {
+    
+    private var UIBounds: CGRect {
+        UIScreen.main.bounds
+    }
+    
       func prepareForLayout() {
           self.translatesAutoresizingMaskIntoConstraints = false
       }
@@ -93,9 +98,9 @@ extension Anchor {
         self.anchor(\.bottomAnchor, on: referenceView, equal: \.bottomAnchor)
     }
     
-    public func anchorToTop<S>(of referenceView: S) where S: UIView{
+    public func anchorToTop<S>(of referenceView: S, constant: CGFloat = 0) where S: UIView{
         prepareForLayout()
-        self.anchor(\.topAnchor, on: referenceView, equal: \.topAnchor)
+        self.anchor(\.topAnchor, on: referenceView, equal: \.topAnchor, constant: UIBounds.height * constant)
     }
     
     public func anchorToBottom<S>(of referenceView: S) where S: UIView{

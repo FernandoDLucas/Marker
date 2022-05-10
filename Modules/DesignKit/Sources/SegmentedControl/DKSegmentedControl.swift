@@ -28,6 +28,8 @@ public final class DKSegmentedControl: UISegmentedControl {
         configureColors()
         setupView()
     }
+    
+    @available (*, unavailable)
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }

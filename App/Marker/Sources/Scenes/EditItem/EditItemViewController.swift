@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import DesignKit
 
 final class EditItemViewController: UIViewController {
     
@@ -27,5 +28,15 @@ final class EditItemViewController: UIViewController {
     
     override func loadView() {
         view = customView
+    }
+    
+    override func viewDidLoad() {
+        let child = DKImagePicker()
+        addChild(child)
+        view.addSubview(child.view)
+        child.view.anchorToHorizontalEdges(of: self.view, withSpace: 17)
+        child.view.anchorToTop(of: self.view)
+        child.view.anchorHeight(basedOn: self.view, withSize: 0.18)
+        child.willMove(toParent: self)
     }
 }

@@ -30,10 +30,13 @@ public final class DKStepperField: UIView {
     public var value: Int {
         Int(self.stepper.value)
     }
+    
+    private var title: String
 
     public init(
         title: String
     ) {
+        self.title = title
         super.init(frame: .zero)
         setupView()
         setupActions()
@@ -78,6 +81,6 @@ extension DKStepperField: ViewCode {
 extension DKStepperField {
     @objc
     private func didTapStepper(sender: UIStepper) {
-        self.label.text = sender.value.description
+        self.label.text = self.title + sender.value.description
     }
 }

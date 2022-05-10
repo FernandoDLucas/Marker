@@ -21,8 +21,21 @@ final class EditItemView: UIView {
     private lazy var typeField = DKSelectorField(
         viewModel: .init(
             title: "Tipo",
-            value: "Quadrinho",
-            imageAcessory: UIImage(systemName: "chevron.right")
+            value: "Quadrinho"
+        )
+    )
+    
+    private lazy var organizedByField = DKSelectorField(
+        viewModel: .init(
+            title: "Organizar por",
+            value: "Volume"
+        )
+    )
+    
+    private lazy var statusField = DKSelectorField(
+        viewModel: .init(
+            title: "Status",
+            value: "Quero ler"
         )
     )
 
@@ -42,7 +55,9 @@ extension EditItemView: ViewCode {
             nameTextField,
             stepperField,
             finalNumberTextField,
-            typeField
+            typeField,
+            organizedByField,
+            statusField
         ])
     }
     
@@ -51,11 +66,13 @@ extension EditItemView: ViewCode {
         setupStepper()
         setupFinalNumberTextField()
         setupTypeField()
+        setupOrganizedField()
+        setupStatusField()
     }
     
     private func setupTextField() {
         nameTextField.anchorToHorizontalEdges(of: self, withSpace: 17)
-        nameTextField.anchorToTop(of: self.safeAreaLayoutGuide)
+        nameTextField.anchorToTop(of: self, constant: 0.22)
         nameTextField.anchorHeight(basedOn: self, withSize: 0.05)
     }
     
@@ -77,4 +94,15 @@ extension EditItemView: ViewCode {
         typeField.anchorHeight(basedOn: self, withSize: 0.05)
     }
 
+    private func setupOrganizedField() {
+        organizedByField.anchorToHorizontalEdges(of: self, withSpace: 17)
+        organizedByField.anchorTopToBottom(of: self.typeField)
+        organizedByField.anchorHeight(basedOn: self, withSize: 0.05)
+    }
+    
+    private func setupStatusField() {
+        statusField.anchorToHorizontalEdges(of: self, withSpace: 17)
+        statusField.anchorTopToBottom(of: self.organizedByField)
+        statusField.anchorHeight(basedOn: self, withSize: 0.05)
+    }
 }
