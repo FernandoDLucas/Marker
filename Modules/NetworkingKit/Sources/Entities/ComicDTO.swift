@@ -18,8 +18,28 @@ public struct ComicDTO {
     public var organizedBy: Int
     
     
+    public init(
+        currentProgress: Int,
+        author: String? = nil,
+        total: Int,
+        cover: Data? = nil,
+        title: String,
+        status: Int,
+        organizedBy: Int
+    ) {
+        self.currentProgress = currentProgress
+        self.author = author
+        self.total = total
+        self.cover = cover
+        self.title = title
+        self.status = status
+        self.organizedBy = organizedBy
+    }
+}
+
+extension ComicDTO {
     public static func fixture(
-        cover: Data? = nil 
+        cover: Data? = nil
     ) -> Self{
         return .init(
             currentProgress: 12,

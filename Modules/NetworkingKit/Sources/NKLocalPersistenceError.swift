@@ -22,5 +22,6 @@ public struct NKLocalPersistenceServiceError: Error {
         case inconsistenceOnContext
         case failToSaveContext
         case failToFetch
+        case failToCreateObject
     }
 }

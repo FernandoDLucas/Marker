@@ -38,6 +38,7 @@ public final class DKStepperField: UIView {
     ) {
         self.title = title
         super.init(frame: .zero)
+        self.backgroundColor = .systemBackground
         setupView()
         setupActions()
     }

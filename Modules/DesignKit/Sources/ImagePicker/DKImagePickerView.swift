@@ -40,7 +40,7 @@ public final class DKImagePickerView: UIView {
         super.init(frame: .zero)
         setupView()
         setupActions()
-        self.backgroundColor = .red
+        self.backgroundColor = .lightGray
     }
     
     @available (*, unavailable)

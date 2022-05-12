@@ -10,14 +10,29 @@ import DesignKit
 import UIKit
 import Strategy
 
-final class EditItemView: UIView {
-        
+protocol EditItemViewProtocol: UIView, DKImagePickerDelegate {
+    var navigationItem: UINavigationItem? { get set }
+    func configure()
+}
+
+protocol EditItemViewDelegate: AnyObject {
+     
+}
+
+final class EditItemView: UIView, EditItemViewProtocol {
+    
+    var navigationItem: UINavigationItem?
+    
+    var coverImage: UIImage?
+    
+    private let viewModel: EditItemViewModel
+    
     private lazy var nameTextField = DKTextField(viewModel: .init(title: "Nome"))
     
     private lazy var stepperField = DKStepperField(title: "Volumes")
     
     private lazy var finalNumberTextField = DKTextField(viewModel: .init(title: "VolumeFinal"))
-
+    
     private lazy var typeField = DKSelectorField(
         viewModel: .init(
             title: "Tipo",
@@ -38,14 +53,27 @@ final class EditItemView: UIView {
             value: "Quero ler"
         )
     )
-
-    init() {
+    
+    init(
+        viewModel: EditItemViewModel
+    ) {
+        self.viewModel = viewModel
         super.init(frame: .zero)
         setupView()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func configure() {
+        self.navigationItem?.rightBarButtonItem = UIBarButtonItem(
+            barButtonSystemItem: .save,
+            target: self,
+            action: #selector(didTapSave)
+        )
+        
+        self.navigationItem?.title = "Adicionar"
     }
 }
 
@@ -93,7 +121,7 @@ extension EditItemView: ViewCode {
         typeField.anchorTopToBottom(of: self.finalNumberTextField)
         typeField.anchorHeight(basedOn: self, withSize: 0.05)
     }
-
+    
     private func setupOrganizedField() {
         organizedByField.anchorToHorizontalEdges(of: self, withSpace: 17)
         organizedByField.anchorTopToBottom(of: self.typeField)
@@ -104,5 +132,30 @@ extension EditItemView: ViewCode {
         statusField.anchorToHorizontalEdges(of: self, withSpace: 17)
         statusField.anchorTopToBottom(of: self.organizedByField)
         statusField.anchorHeight(basedOn: self, withSize: 0.05)
+    }
+    
+    @objc
+    func didTapSave() {
+        try? viewModel.saveItem(.init(
+            currentProgress: stepperField.value,
+            author: " ",
+            total: finalNumberTextField.value,
+            cover: coverImage?.pngData(),
+            title: nameTextField.text.safeUnwrap,
+            status: 1,
+            organizedBy: 1)
+        )
+    }
+}
+
+extension EditItemView {
+    func didSelectImage(_ image: UIImage) {
+        self.coverImage = image
+    }
+}
+
+extension Optional where Wrapped == String {
+    public var safeUnwrap: String {
+        return self ?? " "
     }
 }

@@ -58,6 +58,7 @@ public final class DKSelectorField: UIView {
 
     public init(viewModel: ViewModel) {
         super.init(frame: .zero)
+        self.backgroundColor = .systemBackground
         setupView()
         setupActions()
         configure(with: viewModel)

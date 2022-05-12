@@ -8,6 +8,7 @@
 
 import Strategy
 import UIKit
+import NetworkingKit
 
 protocol ShelfViewCoordinatorProtocol{
     func callAddScreen()
@@ -20,7 +21,9 @@ public final class ShelfViewCoordinator: Navigator, ShelfViewCoordinatorProtocol
     init() {}
 
     func callAddScreen(){
-        let view = EditItemView()
+        let repository = NKLocalPersistenceResolver().createComicRepository()
+        let viewModel = EditItemViewModel(repository: repository)
+        let view = EditItemView(viewModel: viewModel)
         let controller = EditItemViewController(view: view)
         viewController?.navigationController?.pushViewController(controller, animated: true)
     }

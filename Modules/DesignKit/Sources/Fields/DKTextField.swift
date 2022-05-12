@@ -26,6 +26,13 @@ public final class DKTextField: UIView {
         return textField
     }()
     
+    public var value: Int {
+        guard let text = self.textField.text else {
+            return 0
+        }
+        return Int(text) ?? 0
+    }
+    
     public var text: String? {
         self.textField.text
     }

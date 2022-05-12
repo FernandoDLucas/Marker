@@ -12,7 +12,7 @@ import DesignKit
 
 final class EditItemViewController: UIViewController {
     
-    typealias CustomView = EditItemView
+    typealias CustomView = EditItemViewProtocol
     private let customView: CustomView
     
     init(
@@ -31,7 +31,10 @@ final class EditItemViewController: UIViewController {
     }
     
     override func viewDidLoad() {
+        customView.navigationItem = self.navigationItem
+        customView.configure()
         let child = DKImagePicker()
+        child.delegate = customView
         addChild(child)
         view.addSubview(child.view)
         child.view.anchorToHorizontalEdges(of: self.view, withSpace: 17)

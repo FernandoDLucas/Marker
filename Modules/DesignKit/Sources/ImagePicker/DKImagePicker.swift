@@ -12,12 +12,18 @@ import Strategy
 
 typealias PickerDelegate = UIImagePickerControllerDelegate & UINavigationControllerDelegate
 
+public protocol DKImagePickerDelegate: AnyObject {
+    func didSelectImage(_ image: UIImage)
+}
+
 public final class DKImagePicker: UIViewController {
     
     let customView: DKImagePickerViewProtocol
 
     let imagePicker = UIImagePickerController()
     
+    public var delegate: DKImagePickerDelegate?
+
     override public func loadView() {
         view = customView
     }
@@ -45,6 +51,7 @@ extension DKImagePicker: PickerDelegate {
             return
         }
         customView.updateImage(image)
+        delegate?.didSelectImage(image)
         dismiss(animated: true, completion: nil)
     }
 }

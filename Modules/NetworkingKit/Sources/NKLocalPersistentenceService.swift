@@ -35,7 +35,11 @@ final class NKLocalPersistenceService<T: NSManagedObject> {
     }
     
     func save() throws {
-        try context.save()
+        guard let _ = try? context.save() else {
+            throw NKLocalPersistenceServiceError(
+                .failToSaveContext
+            )
+        }
     }
 
     func retriveAll() throws -> [T] {
