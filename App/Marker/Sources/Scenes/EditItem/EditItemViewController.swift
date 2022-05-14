@@ -14,11 +14,14 @@ final class EditItemViewController: UIViewController {
     
     typealias CustomView = EditItemViewProtocol
     private let customView: CustomView
+    private let coordinator: ShelfViewCoordinatorProtocol
     
     init(
-        view: CustomView
+        view: CustomView,
+        coordinator: ShelfViewCoordinatorProtocol
     ) {
         self.customView = view
+        self.coordinator = coordinator
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -41,5 +44,18 @@ final class EditItemViewController: UIViewController {
         child.view.anchorToTop(of: self.view)
         child.view.anchorHeight(basedOn: self.view, withSize: 0.18)
         child.willMove(toParent: self)
+    }
+}
+
+extension EditItemViewController: EditItemViewDelegate {
+    func didSelectOptionsField(
+        itens: [Any?],
+        identifier: SelectableField
+    ) {
+        coordinator.callSelectItemScreen(
+            itens: itens,
+            identifier: identifier,
+            delegate: customView
+        )
     }
 }

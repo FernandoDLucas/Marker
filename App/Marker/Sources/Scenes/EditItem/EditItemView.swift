@@ -10,13 +10,16 @@ import DesignKit
 import UIKit
 import Strategy
 
-protocol EditItemViewProtocol: UIView, DKImagePickerDelegate {
+protocol EditItemViewProtocol: UIView, DKImagePickerDelegate, SelectItemViewDelegate {
     var navigationItem: UINavigationItem? { get set }
     func configure()
 }
 
 protocol EditItemViewDelegate: AnyObject {
-     
+    func didSelectOptionsField(
+        itens: [Any?],
+        identifier: SelectableField
+    )
 }
 
 final class EditItemView: UIView, EditItemViewProtocol {
@@ -24,6 +27,8 @@ final class EditItemView: UIView, EditItemViewProtocol {
     var navigationItem: UINavigationItem?
     
     var coverImage: UIImage?
+    
+    weak var delegate: EditItemViewDelegate?
     
     private let viewModel: EditItemViewModel
     
@@ -60,6 +65,7 @@ final class EditItemView: UIView, EditItemViewProtocol {
         self.viewModel = viewModel
         super.init(frame: .zero)
         setupView()
+        setupActions()
     }
     
     required init?(coder: NSCoder) {
@@ -98,6 +104,21 @@ extension EditItemView: ViewCode {
         setupStatusField()
     }
     
+    private func setupActions() {
+        typeField.addTapAction(
+            on: self,
+            execute: #selector(didTapTypeField)
+        )
+        organizedByField.addTapAction(
+            on: self,
+            execute: #selector(didTapOrganizedField)
+        )
+        statusField.addTapAction(
+            on: self,
+            execute: #selector(didTapStatusField)
+        )
+    }
+
     private func setupTextField() {
         nameTextField.anchorToHorizontalEdges(of: self, withSpace: 17)
         nameTextField.anchorToTop(of: self, constant: 0.22)
@@ -138,12 +159,36 @@ extension EditItemView: ViewCode {
     func didTapSave() {
         try? viewModel.saveItem(.init(
             currentProgress: stepperField.value,
-            author: " ",
+            author: nil,
             total: finalNumberTextField.value,
             cover: coverImage?.pngData(),
             title: nameTextField.text.safeUnwrap,
             status: 1,
             organizedBy: 1)
+        )
+    }
+    
+    @objc
+    func didTapTypeField() {
+        delegate?.didSelectOptionsField(
+            itens: SelectableField.type.options,
+            identifier: .type
+        )
+    }
+    
+    @objc
+    func didTapOrganizedField() {
+        delegate?.didSelectOptionsField(
+            itens: SelectableField.organized.options,
+            identifier: .organized
+        )
+    }
+    
+    @objc
+    func didTapStatusField() {
+        delegate?.didSelectOptionsField(
+            itens: SelectableField.status.options,
+            identifier: .status
         )
     }
 }
@@ -152,10 +197,37 @@ extension EditItemView {
     func didSelectImage(_ image: UIImage) {
         self.coverImage = image
     }
+    
+    func didSelectItem(_ item: Any?, identifier: SelectableField) {
+        switch identifier {
+        case .organized:
+            self.organizedByField.update(with: item as? String)
+        case .status:
+            self.statusField.update(with: item as? String)
+        case .type:
+            self.typeField.update(with: item as? String)
+        }
+    }
 }
 
 extension Optional where Wrapped == String {
     public var safeUnwrap: String {
         return self ?? " "
+    }
+}
+
+
+enum SelectableField: String {
+    case organized, status, type
+    
+    var options: [String] {
+        switch self {
+        case .organized:
+            return ["Volume", "Páginas"]
+        case .status:
+            return  ["Lendo", "Lido", "Quero ler"]
+        case .type:
+            return ["Quadrinho", "Livro", "Mangá"]
+        }
     }
 }

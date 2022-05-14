@@ -113,9 +113,9 @@ extension Anchor {
         self.anchor(\.topAnchor, on: referenceView, equal: \.bottomAnchor)
     }
 
-    public func anchorToLeading<S>(of referenceView: S) where S: UIView{
+    public func anchorToLeading<S>(of referenceView: S, constant: CGFloat = 0) where S: UIView{
         prepareForLayout()
-        self.anchor(\.leadingAnchor, on: referenceView, equal: \.leadingAnchor)
+        self.anchor(\.leadingAnchor, on: referenceView, equal: \.leadingAnchor, constant: constant)
     }
     
     public func anchorLeadingToTrailing<S>(of referenceView: S) where S: UIView{

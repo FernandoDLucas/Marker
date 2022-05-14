@@ -35,7 +35,7 @@ final class MainCoordinator: Coordinator {
         let coordinator = ShelfViewCoordinator()
         let controller = ShelfViewController(customView: view, coordinator: coordinator)
         view.navigationItem = controller.navigationItem
-        coordinator.viewController = controller
+        coordinator.mainViewController = controller
         return controller
     }
 }

@@ -11,9 +11,6 @@ import UIKit
 import Strategy
 import AnchorKit
 
-public protocol DKSelectorFieldDelegate {
-    func didSelectField()
-}
 public final class DKSelectorField: UIView {
     
     public struct ViewModel {
@@ -32,8 +29,6 @@ public final class DKSelectorField: UIView {
         }
     }
     
-    public var delegate: DKSelectorFieldDelegate?
-
     private lazy var identifierLabel: UILabel = {
        let label = UILabel()
         label.font = .systemFont(ofSize: 12)
@@ -60,7 +55,6 @@ public final class DKSelectorField: UIView {
         super.init(frame: .zero)
         self.backgroundColor = .systemBackground
         setupView()
-        setupActions()
         configure(with: viewModel)
     }
     
@@ -73,6 +67,10 @@ public final class DKSelectorField: UIView {
         self.identifierLabel.text = viewModel.title
         self.valueLabel.text = viewModel.value
         self.imageAcessory.image = viewModel.imageAcessory
+    }
+    
+    public func update(with text: String?) {
+        self.valueLabel.text = text
     }
 }
 
@@ -90,13 +88,6 @@ extension DKSelectorField: ViewCode {
         setupIdentifier()
         setupImage()
         setupValue()
-    }
-    
-    func setupActions() {
-        self.addTapAction(
-            on: self,
-            execute: #selector(didSelect)
-        )
     }
     
     private func setupIdentifier() {
@@ -117,9 +108,5 @@ extension DKSelectorField: ViewCode {
         valueLabel.anchorTrailingToLeading(of: imageAcessory)
         valueLabel.anchorWidth(basedOn: self, withSize: 0.35)
     }
-    
-    @objc
-    func didSelect() {
-        delegate?.didSelectField()
-    }
+
 }

@@ -29,19 +29,11 @@ final class ShelfCollectionViewModel: NSObject, ShelfCollectionViewModelProtocol
     ) {
         self.repository = repository
         super.init()
-        createMockIfNeeded()
     }
     
     func initialFetch() {
         let comics = try? repository.retrieveAll()
         self.comic =  comics ?? []
-        delegate?.handleUpdate()
-    }
-    
-    func createMockIfNeeded() {
-        let image = UIImage(named: "coverMock")
-        let item = ComicDTO.fixture(cover: image?.pngData())
-        try? self.repository.create(item)
         delegate?.handleUpdate()
     }
 }

@@ -12,20 +12,39 @@ import NetworkingKit
 
 protocol ShelfViewCoordinatorProtocol{
     func callAddScreen()
+    func callSelectItemScreen(
+        itens: [Any?],
+        identifier: SelectableField,
+        delegate: SelectItemViewDelegate?
+    )
 }
 
-public final class ShelfViewCoordinator: Navigator, ShelfViewCoordinatorProtocol {
+public final class ShelfViewCoordinator: ShelfViewCoordinatorProtocol {
     
-    public weak var viewController: UIViewController? = nil
+    public weak var mainViewController: UIViewController?
+    private weak var editViewController: UIViewController?
 
     init() {}
 
-    func callAddScreen(){
+    func callAddScreen() {
         let repository = NKLocalPersistenceResolver().createComicRepository()
         let viewModel = EditItemViewModel(repository: repository)
         let view = EditItemView(viewModel: viewModel)
-        let controller = EditItemViewController(view: view)
-        viewController?.navigationController?.pushViewController(controller, animated: true)
+        let controller = EditItemViewController(view: view, coordinator: self)
+        view.delegate = controller
+        self.editViewController = controller
+        mainViewController?.navigateTo(controller)
     }
-
+    
+    func callSelectItemScreen(
+        itens: [Any?],
+        identifier: SelectableField,
+        delegate: SelectItemViewDelegate?
+    ) {
+        let viewModel = SelectItemViewModel(itens: itens, identifier: identifier)
+        let view = SelectItemView(viewModel: viewModel)
+        let controller = SelectItemViewController(view: view)
+        viewModel.delegate = delegate
+        editViewController?.navigateTo(controller)
+    }
 }
