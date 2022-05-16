@@ -49,6 +49,7 @@ public final class DKComicCollectionViewLayout: UICollectionViewFlowLayout {
         guard let collectionView = collectionView else {
             return
         }
+        column = 0 
         cache.removeAll()
         contentHeight = 0
         let columnWidth = contentWidth / CGFloat(numberOfColumns)

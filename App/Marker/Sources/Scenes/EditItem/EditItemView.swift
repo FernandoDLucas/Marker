@@ -9,6 +9,7 @@
 import DesignKit
 import UIKit
 import Strategy
+import NetworkingKit
 
 protocol EditItemViewProtocol: UIView, DKImagePickerDelegate, SelectItemViewDelegate {
     var navigationItem: UINavigationItem? { get set }
@@ -163,7 +164,7 @@ extension EditItemView: ViewCode {
             total: finalNumberTextField.value,
             cover: coverImage?.pngData(),
             title: nameTextField.text.safeUnwrap,
-            status: 1,
+            status: ComicStatusInteraction.getIndexFor(statusField.value),
             organizedBy: 1)
         )
     }

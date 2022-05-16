@@ -14,6 +14,9 @@ public protocol NKComicRepositoryProtocol {
     func create(
         _ comicDTO: ComicDTO
     ) throws -> Comic
+    func retrieve(
+        status: ComicStatus
+    ) throws -> [Comic]
 }
 
 public final class NKComicRepository: NKComicRepositoryProtocol{
@@ -51,5 +54,12 @@ public final class NKComicRepository: NKComicRepositoryProtocol{
         comic.status = Int16(DTO.status)
         comic.title = DTO.title
         comic.total = Int32(DTO.total)
+    }
+    
+    public func retrieve(
+        status: ComicStatus
+    ) throws -> [Comic] {
+        let keySearch = SearchByStatus(status: status)
+        return try service.retrive(keySearch)
     }
 }

@@ -52,12 +52,10 @@ final class NKLocalPersistenceService<T: NSManagedObject> {
         }
     }
 
-    func retrive(_ keySearch: NKKeySearch) throws -> T {
+    func retrive(_ keySearch: NKKeySearch) throws -> [T] {
         let fetch = prepareForFetch(keySearch)
         do {
-            guard let object = try context.fetch(fetch).first else {
-                throw NKLocalPersistenceServiceError(.failToFetch)
-            }
+            let object = try context.fetch(fetch)
             return object
         } catch let error {
             throw NKLocalPersistenceServiceError(.failToFetch, underlyingError: error)
@@ -66,7 +64,7 @@ final class NKLocalPersistenceService<T: NSManagedObject> {
     
     private func prepareForFetch(_ keySearch: NKKeySearch) -> NSFetchRequest<T>{
         let request = NSFetchRequest<T>(entityName: T.entityName)
-        request.sortDescriptors = [NSSortDescriptor(key: keySearch.descriptor, ascending: true)]
+        request.sortDescriptors = keySearch.descriptor
         request.predicate  = keySearch.predicate
         request.fetchLimit = keySearch.fetchLimit
         return request

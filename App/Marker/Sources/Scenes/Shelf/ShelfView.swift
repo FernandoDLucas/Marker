@@ -19,7 +19,7 @@ protocol ShelfViewDelegate: AnyObject {}
 final class ShelfView: UIView, ShelfViewProtocol {
     
     private lazy var segmentedControl: DKSegmentedControl = {
-        let segmentedControl = DKSegmentedControl(items: ["Lido", "Lendo", "Para Ler"])
+        let segmentedControl = DKSegmentedControl(items: ["Lendo", "Lido", "Para Ler"])
         segmentedControl.addTarget(self, action: #selector(segmentedControlValueChanged), for: .valueChanged)
         return segmentedControl
     }()
@@ -67,7 +67,7 @@ extension ShelfView: ViewCode {
     @objc
     func segmentedControlValueChanged(_ sender: UISegmentedControl) {
         segmentedControl.indexChanged(newIndex: sender.selectedSegmentIndex)
-        self.viewModel.initialFetch()
+        viewModel.fetch(index: sender.selectedSegmentIndex)
     }
 }
 

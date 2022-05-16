@@ -24,6 +24,12 @@ extension Comic {
     @NSManaged public var title: String
     @NSManaged public var status: Int16
     @NSManaged public var organizedBy: Int16
+    @NSManaged public var creationDate: NSDate?
+
+    public override func awakeFromInsert() {
+        super.awakeFromInsert()
+        self.creationDate = NSDate.now as NSDate
+    }
 
 }
 

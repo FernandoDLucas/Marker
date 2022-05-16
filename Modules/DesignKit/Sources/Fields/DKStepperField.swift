@@ -14,7 +14,7 @@ public final class DKStepperField: UIView {
     
     private lazy var label: UILabel = {
        let label = UILabel()
-        label.font = .systemFont(ofSize: 12)
+        label.font = .systemFont(ofSize: 15, weight: .semibold)
         label.adjustsFontSizeToFitWidth = true
         return label
     }()
