@@ -16,7 +16,7 @@ protocol ShelfCollectionViewModelDelegate: AnyObject {
 protocol ShelfCollectionViewModelProtocol: UICollectionViewDelegate, UICollectionViewDataSource{
     var delegate: ShelfCollectionViewModelDelegate? { get set }
     func initialFetch()
-    func fetch(index: Int)
+    func fetch(status: ComicStatus)
 }
 
 final class ShelfCollectionViewModel: NSObject, ShelfCollectionViewModelProtocol {
@@ -38,26 +38,12 @@ final class ShelfCollectionViewModel: NSObject, ShelfCollectionViewModelProtocol
         delegate?.handleUpdate()
     }
     
-    func fetch(index: Int) {
-        let status = getCaseForIndex(index: index)
+    func fetch(status: ComicStatus) {
         guard let comics = try? repository.retrieve(status: status) else {
             return
         }
         self.comics = comics
         delegate?.handleUpdate()
-    }
-    
-    func getCaseForIndex(index: Int) -> ComicStatus {
-        switch index {
-        case 0:
-            return .reading
-        case 1:
-            return .read
-        case 2:
-            return .wantToRead
-        default:
-            return .reading
-        }
     }
 }
 

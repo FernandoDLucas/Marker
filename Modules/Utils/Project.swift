@@ -3,23 +3,22 @@ import ProjectDescriptionHelpers
 
 let targets = [
     Target(
-        name: "Strategy",
+        name: "Utils",
         platform: .iOS,
         product: .framework,
-        bundleId: "com.Marker.Strategy",
+        bundleId: "com.Marker.Utils",
         deploymentTarget: .iOS(targetVersion: "13.1", devices: [.iphone]),
         infoPlist: .extendingDefault(with: [:]),
         sources: ["Sources/**"],
         resources: [
         ],
         dependencies: [
-            Dependencies.Utils.project
         ]
     )
 ]
 
 let project = Project(
-    name: "Strategy",
+    name: "Utils",
     organizationName: "Marker",
     packages: [],
     targets: targets

@@ -9,6 +9,7 @@
 import AnchorKit
 import UIKit
 import Strategy
+import Utils
 
 typealias PickerDelegate = UIImagePickerControllerDelegate & UINavigationControllerDelegate
 
@@ -47,9 +48,10 @@ extension DKImagePicker: PickerDelegate {
         didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]
     ) {
         
-        guard let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage else {
+        guard let imageInfo = info[UIImagePickerController.InfoKey.originalImage] as? UIImage else {
             return
         }
+        let image = imageInfo.fixedOrientation
         customView.updateImage(image)
         delegate?.didSelectImage(image)
         dismiss(animated: true, completion: nil)

@@ -15,7 +15,7 @@ let targets = [
             
         ],
         dependencies: [
-
+            Dependencies.Utils.project
         ],
         coreDataModels: [CoreDataModel(Path.relativeToManifest("Resources/Marker.xcdatamodeld"))]
     ),

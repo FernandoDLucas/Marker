@@ -73,13 +73,13 @@ extension DKTextField: ViewCode {
     private func buildLabel() {
         label.anchorToVerticalEdges(of: self)
         label.anchorToLeading(of: self)
-        label.anchorWidth(basedOn: self, withSize: 0.2)
+        label.anchorWidth(basedOn: self, withSize: 0.4)
     }
     
     private func buildTextField() {
         textField.anchorToVerticalEdges(of: self)
         textField.anchorToTrailing(of: self)
-        textField.anchorWidth(basedOn: self, withSize: 0.8)
+        textField.anchorWidth(basedOn: self, withSize: 0.6)
     }
 }
 

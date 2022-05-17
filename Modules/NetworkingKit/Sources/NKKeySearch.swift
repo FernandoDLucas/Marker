@@ -28,27 +28,7 @@ public struct SearchByStatus: NKKeySearch {
     public init(
         status: ComicStatus
     ) {
-        self.predicate = NSPredicate(format: "status = %d", status.rawValue)
-    }
-}
-
-public enum ComicStatus: Int {
-    case reading, read, wantToRead
-}
-
-public struct ComicStatusInteraction {
-    
-    public static func getIndexFor(_ value: String) -> Int {
-        switch value {
-        case "Lido":
-            return 0
-        case "Lendo":
-            return 1
-        case "Quero Ler":
-            return 2
-        default:
-            return 0
-        }
+        self.predicate = NSPredicate(format: "status = %d", status.intValue)
     }
 }
 

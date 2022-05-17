@@ -7,19 +7,23 @@
 
 import ProjectDescription
 
-public struct DependenciesManager {
+public enum Dependencies: String, CaseIterable {
+    case Strategy
+    case DesignKit
+    case NetworkingKit
+    case AnchorKit
+    case Utils
     
-    enum Dependencies: String, CaseIterable {
-        case Strategy
-        case DesignKit
-        case NetworkingKit
-        case AnchorKit
+    public var project: TargetDependency {
+        return .project(target: self.rawValue, path: Path.relativeToRoot("Modules/\(self.rawValue)"))
     }
-    
+}
+
+public struct DependenciesManager {
     public static var projectDependencies: [TargetDependency] {
         var dependencies = [TargetDependency]()
         Dependencies.allCases.forEach {
-            dependencies.append(.project(target: $0.rawValue, path: "../Modules/\($0)"))
+            dependencies.append($0.project)
         }
         return dependencies
     }

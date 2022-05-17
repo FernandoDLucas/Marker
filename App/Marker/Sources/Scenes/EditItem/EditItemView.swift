@@ -10,6 +10,7 @@ import DesignKit
 import UIKit
 import Strategy
 import NetworkingKit
+import Utils
 
 protocol EditItemViewProtocol: UIView, DKImagePickerDelegate, SelectItemViewDelegate {
     var navigationItem: UINavigationItem? { get set }
@@ -37,7 +38,7 @@ final class EditItemView: UIView, EditItemViewProtocol {
     
     private lazy var stepperField = DKStepperField(title: "Volumes")
     
-    private lazy var finalNumberTextField = DKTextField(viewModel: .init(title: "VolumeFinal"))
+    private lazy var finalNumberTextField = DKTextField(viewModel: .init(title: "Volume Final"))
     
     private lazy var typeField = DKSelectorField(
         viewModel: .init(
@@ -164,7 +165,7 @@ extension EditItemView: ViewCode {
             total: finalNumberTextField.value,
             cover: coverImage?.pngData(),
             title: nameTextField.text.safeUnwrap,
-            status: ComicStatusInteraction.getIndexFor(statusField.value),
+            status: ComicStatus.getIndexFor(statusField.value),
             organizedBy: 1)
         )
     }
