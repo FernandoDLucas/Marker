@@ -8,7 +8,11 @@
 
 import UIKit
 
-class ShelfViewController: UIViewController {
+protocol ShelfViewControllerProtocol: UIViewController {
+    func didFinishPresentEditScreen()
+}
+
+class ShelfViewController: UIViewController,ShelfViewControllerProtocol {
 
     typealias CustomView = ShelfViewProtocol
     private let customView: CustomView
@@ -32,17 +36,27 @@ class ShelfViewController: UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "Marker"
+        self.title = "Sua Coleção"
         self.setupNavigationBar(navColor: .clear, barColor: .black)
         self.navigationItem.rightBarButtonItem = .init(
             barButtonSystemItem: .add,
             target: self,
             action: #selector(callAdd)
         )
+        customView.update()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.navigationController?.navigationBar.prefersLargeTitles = true
     }
     
     @objc
     func callAdd() {
         coordinator.callAddScreen()
     }
+    
+    func didFinishPresentEditScreen() {
+        customView.update()
+    }
+
 }

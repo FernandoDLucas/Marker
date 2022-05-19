@@ -45,6 +45,10 @@ final class EditItemViewController: UIViewController {
         child.view.anchorHeight(basedOn: self.view, withSize: 0.18)
         child.willMove(toParent: self)
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.navigationController?.navigationBar.prefersLargeTitles = false 
+    }
 }
 
 extension EditItemViewController: EditItemViewDelegate {
@@ -57,5 +61,9 @@ extension EditItemViewController: EditItemViewDelegate {
             identifier: identifier,
             delegate: customView
         )
+    }
+    
+    func didSavedItem() {
+        coordinator.pop()
     }
 }

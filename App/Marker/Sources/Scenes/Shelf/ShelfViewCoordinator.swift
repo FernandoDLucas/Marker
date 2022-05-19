@@ -17,11 +17,12 @@ protocol ShelfViewCoordinatorProtocol{
         identifier: SelectableField,
         delegate: SelectItemViewDelegate?
     )
+    func pop()
 }
 
 public final class ShelfViewCoordinator: ShelfViewCoordinatorProtocol {
     
-    public weak var mainViewController: UIViewController?
+    weak var mainViewController: ShelfViewControllerProtocol?
     private weak var editViewController: UIViewController?
 
     init() {}
@@ -46,5 +47,10 @@ public final class ShelfViewCoordinator: ShelfViewCoordinatorProtocol {
         let controller = SelectItemViewController(view: view)
         viewModel.delegate = delegate
         editViewController?.navigateTo(controller)
+    }
+    
+    func pop() {
+        self.editViewController?.pop()
+        self.mainViewController?.didFinishPresentEditScreen()
     }
 }

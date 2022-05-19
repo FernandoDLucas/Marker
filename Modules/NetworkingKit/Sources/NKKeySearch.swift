@@ -18,11 +18,11 @@ public struct SearchByStatus: NKKeySearch {
     public var predicate: NSPredicate
     
     public var descriptor: [NSSortDescriptor] {
-        [NSSortDescriptor(key: "creationDate", ascending: true)]
+        [NSSortDescriptor(key: "creationDate", ascending: false)]
     }
     
     public var fetchLimit: Int {
-        1
+        20
     }
     
     public init(

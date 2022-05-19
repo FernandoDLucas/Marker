@@ -42,19 +42,19 @@ public final class DKSegmentedControl: UISegmentedControl {
     }
 
     public func indexChanged(newIndex: Int) {
-//        segmentIndicator.translatesAutoresizingMaskIntoConstraints = false
-//        leading.isActive = false
-//        leading = segmentIndicator.leadingAnchor.constraint(
-//            equalTo: self.leadingAnchor,
-//            constant: (((UIScreen.main.bounds.width)/3) * CGFloat(newIndex))+(20/2)
-//        )
-//        leading.isActive = true
-//        UIView.animate(
-//            withDuration: 0.2,
-//            animations: {
-//                self.layoutIfNeeded()
-//            }
-//        )
+        segmentIndicator.translatesAutoresizingMaskIntoConstraints = false
+        leading.isActive = false
+        leading = segmentIndicator.leadingAnchor.constraint(
+            equalTo: self.leadingAnchor,
+            constant: (((UIScreen.main.bounds.width)/3) * CGFloat(newIndex))+(20/2)
+        )
+        leading.isActive = true
+        UIView.animate(
+            withDuration: 0.2,
+            animations: {
+                self.layoutIfNeeded()
+            }
+        )
         configureColors()
     }
 

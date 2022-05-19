@@ -6,10 +6,10 @@
 //  Copyright © 2022 Marker. All rights reserved.
 //
 
-import Foundation
+import Strategy
 import UIKit
 
-protocol SelectItemViewModelProtocol: UITableViewDelegate, UITableViewDataSource {}
+protocol SelectItemViewModelProtocol: TableViewModelProtocol {}
 
 protocol SelectItemViewDelegate: AnyObject {
     func didSelectItem(_ item: Any?, identifier: SelectableField)

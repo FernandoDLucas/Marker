@@ -22,6 +22,7 @@ protocol EditItemViewDelegate: AnyObject {
         itens: [Any?],
         identifier: SelectableField
     )
+    func didSavedItem()
 }
 
 final class EditItemView: UIView, EditItemViewProtocol {
@@ -57,7 +58,7 @@ final class EditItemView: UIView, EditItemViewProtocol {
     private lazy var statusField = DKSelectorField(
         viewModel: .init(
             title: "Status",
-            value: "Quero ler"
+            value: "Quero Ler"
         )
     )
     
@@ -168,6 +169,8 @@ extension EditItemView: ViewCode {
             status: ComicStatus.getIndexFor(statusField.value),
             organizedBy: 1)
         )
+
+        delegate?.didSavedItem()
     }
     
     @objc
@@ -227,7 +230,7 @@ enum SelectableField: String {
         case .organized:
             return ["Volume", "Páginas"]
         case .status:
-            return  ["Lendo", "Lido", "Quero ler"]
+            return  ["Lendo", "Lido", "Quero Ler"]
         case .type:
             return ["Quadrinho", "Livro", "Mangá"]
         }

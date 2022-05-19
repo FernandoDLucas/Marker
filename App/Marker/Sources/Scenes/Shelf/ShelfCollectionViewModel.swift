@@ -6,14 +6,14 @@
 //  Copyright © 2022 Marker. All rights reserved.
 //
 
-import Foundation
-import UIKit
+import Strategy
 import NetworkingKit
+import UIKit
 
 protocol ShelfCollectionViewModelDelegate: AnyObject {
     func handleUpdate() 
 }
-protocol ShelfCollectionViewModelProtocol: UICollectionViewDelegate, UICollectionViewDataSource{
+protocol ShelfCollectionViewModelProtocol: CollectionViewModelProtocol {
     var delegate: ShelfCollectionViewModelDelegate? { get set }
     func initialFetch()
     func fetch(status: ComicStatus)
@@ -33,8 +33,10 @@ final class ShelfCollectionViewModel: NSObject, ShelfCollectionViewModelProtocol
     }
     
     func initialFetch() {
-        let comics = try? repository.retrieveAll()
-        self.comics =  comics ?? []
+        guard let comics = try? repository.retrieve(status: .reading) else {
+            return
+        }
+        self.comics = comics
         delegate?.handleUpdate()
     }
     

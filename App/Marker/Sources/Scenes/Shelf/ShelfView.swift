@@ -12,7 +12,9 @@ import DesignKit
 import Strategy
 import NetworkingKit
 
-protocol ShelfViewProtocol: UIView {}
+protocol ShelfViewProtocol: UIView {
+    func update()
+}
 
 protocol ShelfViewDelegate: AnyObject {}
 
@@ -41,6 +43,11 @@ final class ShelfView: UIView, ShelfViewProtocol {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func update() {
+        let status = ComicStatus.getCaseInIndex(segmentedControl.selectedSegmentIndex)
+        viewModel.fetch(status: status)
     }
 }
 

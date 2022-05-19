@@ -11,10 +11,15 @@ import UIKit
 
 public protocol Navigator {
     func navigateTo(_ controller: UIViewController)
+    func pop()
 }
 
 extension UIViewController: Navigator {
     public func navigateTo(_ controller: UIViewController) {
         self.navigationController?.pushViewController(controller, animated: true)
+    }
+    
+    public func pop() {
+        self.navigationController?.popViewController(animated: true)
     }
 }
