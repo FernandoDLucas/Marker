@@ -11,14 +11,18 @@ import DesignKit
 
 final class SelectItemViewController: UIViewController {
     
-    typealias CustomView = SelectItemView
-    private let customView: SelectItemView
+    typealias CustomView = SelectItemViewProtocol
+    private let customView: CustomView
+    private let coordinator: ShelfViewCoordinatorProtocol
     
     init(
-        view: CustomView
+        view: CustomView,
+        coordinator: ShelfViewCoordinatorProtocol
     ) {
         self.customView = view
+        self.coordinator = coordinator
         super.init(nibName: nil, bundle: nil)
+        self.customView.delegate = self
     }
     
     required init?(coder: NSCoder) {
@@ -29,7 +33,16 @@ final class SelectItemViewController: UIViewController {
         view = customView
     }
     
-    override func viewDidLoad() {
-        customView.tableView.reloadData()
+}
+
+extension SelectItemViewController: SelectItemViewDelegate {
+    func didSelectItem(
+        _ item: Any?,
+        identifier: SelectableField
+    ) {
+        coordinator.popSelectView(
+            item: item,
+            identifier: identifier
+        )
     }
 }

@@ -32,7 +32,9 @@ public final class DKImagePickerView: UIView {
     
     private lazy var iconImageView: UIImageView = {
         let imageView = UIImageView()
+        imageView.image = UIImage(systemName: "photo.on.rectangle.angled")
         imageView.contentMode = .scaleAspectFit
+        imageView.tintColor = .black
         return imageView
     }()
     
@@ -66,7 +68,12 @@ extension DKImagePickerView: ViewCode {
         pickerImageView.anchorToEdges(of: self)
     }
     
-    private func setupIcon() {}
+    private func setupIcon() {
+        iconImageView.anchorToTrailing(of: self)
+        iconImageView.anchorToBottom(of: self)
+        iconImageView.anchorHeight(withSize: 50)
+        iconImageView.anchorWidth(withSize: 50)
+    }
     
     private func setupActions() {
         self.addTapAction(

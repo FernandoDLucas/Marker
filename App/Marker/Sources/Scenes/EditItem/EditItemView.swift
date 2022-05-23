@@ -12,9 +12,13 @@ import Strategy
 import NetworkingKit
 import Utils
 
-protocol EditItemViewProtocol: UIView, DKImagePickerDelegate, SelectItemViewDelegate {
+protocol EditItemViewProtocol: UIView, DKImagePickerDelegate {
     var navigationItem: UINavigationItem? { get set }
     func configure()
+    func updateField(
+        item: Any?,
+        identifier: SelectableField
+    )
 }
 
 protocol EditItemViewDelegate: AnyObject {
@@ -41,12 +45,12 @@ final class EditItemView: UIView, EditItemViewProtocol {
     
     private lazy var finalNumberTextField = DKTextField(viewModel: .init(title: "Volume Final"))
     
-    private lazy var typeField = DKSelectorField(
-        viewModel: .init(
-            title: "Tipo",
-            value: "Quadrinho"
-        )
-    )
+//    private lazy var typeField = DKSelectorField(
+//        viewModel: .init(
+//            title: "Tipo",
+//            value: "Quadrinho"
+//        )
+//    )
     
     private lazy var organizedByField = DKSelectorField(
         viewModel: .init(
@@ -167,8 +171,9 @@ extension EditItemView: ViewCode {
             cover: coverImage?.pngData(),
             title: nameTextField.text.safeUnwrap,
             status: ComicStatus.getIndexFor(statusField.value),
-            organizedBy: 1)
+            organizedBy: ComicOrganizedBy.getIndexFor(organizedByField.value)
         )
+    )
 
         delegate?.didSavedItem()
     }
@@ -203,7 +208,10 @@ extension EditItemView {
         self.coverImage = image
     }
     
-    func didSelectItem(_ item: Any?, identifier: SelectableField) {
+    func updateField(
+        item: Any?,
+        identifier: SelectableField
+    ) {
         switch identifier {
         case .organized:
             self.organizedByField.update(with: item as? String)
@@ -228,9 +236,9 @@ enum SelectableField: String {
     var options: [String] {
         switch self {
         case .organized:
-            return ["Volume", "Páginas"]
+            return ComicOrganizedBy.allValues
         case .status:
-            return  ["Lendo", "Lido", "Quero Ler"]
+            return  ComicStatus.allValues
         case .type:
             return ["Quadrinho", "Livro", "Mangá"]
         }

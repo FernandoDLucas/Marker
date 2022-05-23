@@ -10,7 +10,14 @@ import Foundation
 import UIKit
 import DesignKit
 
-final class EditItemViewController: UIViewController {
+protocol EditItemViewControllerProtocol: UIViewController {
+    func updateField(
+        item: Any?,
+        identifier: SelectableField
+    )
+}
+
+final class EditItemViewController: UIViewController, EditItemViewControllerProtocol {
     
     typealias CustomView = EditItemViewProtocol
     private let customView: CustomView
@@ -36,18 +43,29 @@ final class EditItemViewController: UIViewController {
     override func viewDidLoad() {
         customView.navigationItem = self.navigationItem
         customView.configure()
+        addChildPickerView()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.navigationController?.navigationBar.prefersLargeTitles = false 
+    }
+    
+    func addChildPickerView() {
         let child = DKImagePicker()
         child.delegate = customView
         addChild(child)
         view.addSubview(child.view)
         child.view.anchorToHorizontalEdges(of: self.view, withSpace: 17)
-        child.view.anchorToTop(of: self.view)
+        child.view.anchorToTop(of: self.view.safeAreaLayoutGuide)
         child.view.anchorHeight(basedOn: self.view, withSize: 0.18)
         child.willMove(toParent: self)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        self.navigationController?.navigationBar.prefersLargeTitles = false 
+    func updateField(
+        item: Any?,
+        identifier: SelectableField
+    ) {
+        customView.updateField(item: item, identifier: identifier)
     }
 }
 
@@ -58,12 +76,11 @@ extension EditItemViewController: EditItemViewDelegate {
     ) {
         coordinator.callSelectItemScreen(
             itens: itens,
-            identifier: identifier,
-            delegate: customView
+            identifier: identifier
         )
     }
     
     func didSavedItem() {
-        coordinator.pop()
+        coordinator.popEditView()
     }
 }

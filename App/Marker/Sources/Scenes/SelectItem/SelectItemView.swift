@@ -10,9 +10,21 @@ import AnchorKit
 import UIKit
 import Strategy
 
-final class SelectItemView: UIView {
+protocol SelectItemViewProtocol: UIView {
+    var delegate: SelectItemViewDelegate? { get set }
+}
+
+protocol SelectItemViewDelegate: AnyObject {
+    func didSelectItem(
+        _ item: Any?,
+        identifier: SelectableField
+    )
+}
+
+final class SelectItemView: UIView, SelectItemViewProtocol {
         
     private let viewModel: SelectItemViewModelProtocol
+    weak var delegate: SelectItemViewDelegate?
 
     lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -32,6 +44,7 @@ final class SelectItemView: UIView {
         super.init(frame: .zero)
         tableView.delegate = self.viewModel
         tableView.dataSource = self.viewModel
+        self.viewModel.delegate = self
         setupView()
     }
     
@@ -50,5 +63,13 @@ extension SelectItemView: ViewCode {
     func setupConstraints() {
         tableView.anchorToEdges(of: self)
     }
-    
+}
+
+extension SelectItemView: SelectItemViewModelDelegate {
+    func didSelectItem(
+        _ item: Any?,
+        identifier: SelectableField
+    ) {
+        delegate?.didSelectItem(item, identifier: identifier)
+    }
 }

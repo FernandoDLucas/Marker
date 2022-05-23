@@ -14,16 +14,20 @@ protocol ShelfViewCoordinatorProtocol{
     func callAddScreen()
     func callSelectItemScreen(
         itens: [Any?],
-        identifier: SelectableField,
-        delegate: SelectItemViewDelegate?
+        identifier: SelectableField
     )
-    func pop()
+    func popEditView()
+    func popSelectView(
+        item: Any?,
+        identifier: SelectableField
+    )
 }
 
 public final class ShelfViewCoordinator: ShelfViewCoordinatorProtocol {
     
     weak var mainViewController: ShelfViewControllerProtocol?
-    private weak var editViewController: UIViewController?
+    private weak var editViewController: EditItemViewControllerProtocol?
+    private weak var selectViewController: UIViewController?
 
     init() {}
 
@@ -39,18 +43,25 @@ public final class ShelfViewCoordinator: ShelfViewCoordinatorProtocol {
     
     func callSelectItemScreen(
         itens: [Any?],
-        identifier: SelectableField,
-        delegate: SelectItemViewDelegate?
+        identifier: SelectableField
     ) {
         let viewModel = SelectItemViewModel(itens: itens, identifier: identifier)
         let view = SelectItemView(viewModel: viewModel)
-        let controller = SelectItemViewController(view: view)
-        viewModel.delegate = delegate
+        let controller = SelectItemViewController(view: view, coordinator: self)
+        self.selectViewController = controller
         editViewController?.navigateTo(controller)
     }
-    
-    func pop() {
+        
+    func popEditView() {
         self.editViewController?.pop()
         self.mainViewController?.didFinishPresentEditScreen()
+    }
+    
+    func popSelectView(
+        item: Any?,
+        identifier: SelectableField
+    ) {
+        self.editViewController?.updateField(item: item, identifier: identifier)
+        self.selectViewController?.pop()
     }
 }

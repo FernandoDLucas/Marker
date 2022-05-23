@@ -14,7 +14,10 @@ public final class DKStepperField: UIView {
     
     private lazy var label: UILabel = {
        let label = UILabel()
-        label.font = .systemFont(ofSize: 15, weight: .semibold)
+        label.font = .systemFont(
+            ofSize: 15,
+            weight: .semibold
+        )
         label.adjustsFontSizeToFitWidth = true
         return label
     }()
@@ -23,7 +26,11 @@ public final class DKStepperField: UIView {
         let stepper = UIStepper()
         stepper.tintColor = .black
         stepper.backgroundColor = .clear
-        stepper.addTarget(self, action: #selector(didTapStepper), for: .valueChanged)
+        stepper.addTarget(
+            self,
+            action: #selector(didTapStepper),
+            for: .valueChanged
+        )
         return stepper
     }()
     
@@ -41,6 +48,7 @@ public final class DKStepperField: UIView {
         self.backgroundColor = .systemBackground
         setupView()
         setupActions()
+        self.label.text = title
     }
     
     @available (*, unavailable)
@@ -82,6 +90,10 @@ extension DKStepperField: ViewCode {
 extension DKStepperField {
     @objc
     private func didTapStepper(sender: UIStepper) {
-        self.label.text = self.title + sender.value.description
+        var description: String = " "
+        if sender.value > 0 {
+            description += "\(Int(sender.value))"
+        }
+        self.label.text = self.title + description
     }
 }

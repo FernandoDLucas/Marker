@@ -9,17 +9,22 @@
 import Strategy
 import UIKit
 
-protocol SelectItemViewModelProtocol: TableViewModelProtocol {}
+protocol SelectItemViewModelProtocol: TableViewModelProtocol {
+    var delegate: SelectItemViewModelDelegate? { get set }
+}
 
-protocol SelectItemViewDelegate: AnyObject {
-    func didSelectItem(_ item: Any?, identifier: SelectableField)
+protocol SelectItemViewModelDelegate: AnyObject {
+    func didSelectItem(
+        _ item: Any?,
+        identifier: SelectableField
+    )
 }
 
 final class SelectItemViewModel: NSObject, SelectItemViewModelProtocol {
     
     private let itens: [Any?]
     private let identifier: SelectableField
-    weak var delegate: SelectItemViewDelegate?
+    weak var delegate: SelectItemViewModelDelegate?
 
     init(
         itens: [Any?],
