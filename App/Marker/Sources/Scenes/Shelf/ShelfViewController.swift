@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import NetworkingKit
 
 protocol ShelfViewControllerProtocol: UIViewController {
     func didFinishPresentEditScreen()
@@ -36,6 +37,7 @@ class ShelfViewController: UIViewController,ShelfViewControllerProtocol {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.customView.delegate = self
         self.title = "Sua Coleção"
         self.setupNavigationBar(navColor: .clear, barColor: .black)
         self.navigationItem.rightBarButtonItem = .init(
@@ -52,11 +54,16 @@ class ShelfViewController: UIViewController,ShelfViewControllerProtocol {
     
     @objc
     func callAdd() {
-        coordinator.callAddScreen()
+        coordinator.callEditScreen(object: nil)
     }
     
     func didFinishPresentEditScreen() {
         customView.update()
     }
+}
 
+extension ShelfViewController: ShelfViewDelegate {
+    func didSelectCellWithObjec(object: Comic) {
+        coordinator.callEditScreen(object: object)
+    }
 }

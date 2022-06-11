@@ -40,6 +40,10 @@ public final class DKImagePicker: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    public func updateImage(_ image: UIImage?) {
+        self.customView.updateImage(image)
+    }
 }
 
 extension DKImagePicker: PickerDelegate {

@@ -14,7 +14,8 @@ import Utils
 
 protocol EditItemViewProtocol: UIView, DKImagePickerDelegate {
     var navigationItem: UINavigationItem? { get set }
-    func configure()
+    var imagePicker: DKImagePicker { get }
+    func configureNavigation()
     func updateField(
         item: Any?,
         identifier: SelectableField
@@ -35,22 +36,17 @@ final class EditItemView: UIView, EditItemViewProtocol {
     
     var coverImage: UIImage?
     
+    var imagePicker = DKImagePicker()
+    
     weak var delegate: EditItemViewDelegate?
     
     private let viewModel: EditItemViewModel
     
-    private lazy var nameTextField = DKTextField(viewModel: .init(title: "Nome"))
+    private lazy var nameTextField = DKTextField(title: "Nome")
     
     private lazy var stepperField = DKStepperField(title: "Volumes")
     
-    private lazy var finalNumberTextField = DKTextField(viewModel: .init(title: "Volume Final"))
-    
-//    private lazy var typeField = DKSelectorField(
-//        viewModel: .init(
-//            title: "Tipo",
-//            value: "Quadrinho"
-//        )
-//    )
+    private lazy var finalNumberTextField = DKTextField(title: "Volume Final")
     
     private lazy var organizedByField = DKSelectorField(
         viewModel: .init(
@@ -71,15 +67,17 @@ final class EditItemView: UIView, EditItemViewProtocol {
     ) {
         self.viewModel = viewModel
         super.init(frame: .zero)
+        imagePicker.delegate = self
         setupView()
         setupActions()
+        updateWithObject()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure() {
+    func configureNavigation() {
         self.navigationItem?.rightBarButtonItem = UIBarButtonItem(
             barButtonSystemItem: .save,
             target: self,
@@ -87,6 +85,16 @@ final class EditItemView: UIView, EditItemViewProtocol {
         )
         
         self.navigationItem?.title = "Adicionar"
+    }
+    
+    func updateWithObject() {
+        if let comic = viewModel.retrieveObject() {
+            if let data = comic.cover {
+                let image = UIImage(data: data)
+                self.imagePicker.updateImage(image)
+            }
+            self.nameTextField.configure(with: comic.title)
+        }
     }
 }
 
@@ -96,7 +104,6 @@ extension EditItemView: ViewCode {
             nameTextField,
             stepperField,
             finalNumberTextField,
-            typeField,
             organizedByField,
             statusField
         ])
@@ -106,16 +113,11 @@ extension EditItemView: ViewCode {
         setupTextField()
         setupStepper()
         setupFinalNumberTextField()
-        setupTypeField()
         setupOrganizedField()
         setupStatusField()
     }
     
     private func setupActions() {
-        typeField.addTapAction(
-            on: self,
-            execute: #selector(didTapTypeField)
-        )
         organizedByField.addTapAction(
             on: self,
             execute: #selector(didTapOrganizedField)
@@ -144,15 +146,9 @@ extension EditItemView: ViewCode {
         finalNumberTextField.anchorHeight(basedOn: self, withSize: 0.05)
     }
     
-    private func setupTypeField() {
-        typeField.anchorToHorizontalEdges(of: self, withSpace: 17)
-        typeField.anchorTopToBottom(of: self.finalNumberTextField)
-        typeField.anchorHeight(basedOn: self, withSize: 0.05)
-    }
-    
     private func setupOrganizedField() {
         organizedByField.anchorToHorizontalEdges(of: self, withSpace: 17)
-        organizedByField.anchorTopToBottom(of: self.typeField)
+        organizedByField.anchorTopToBottom(of: self.finalNumberTextField)
         organizedByField.anchorHeight(basedOn: self, withSize: 0.05)
     }
     
@@ -176,14 +172,6 @@ extension EditItemView: ViewCode {
     )
 
         delegate?.didSavedItem()
-    }
-    
-    @objc
-    func didTapTypeField() {
-        delegate?.didSelectOptionsField(
-            itens: SelectableField.type.options,
-            identifier: .type
-        )
     }
     
     @objc
@@ -217,8 +205,6 @@ extension EditItemView {
             self.organizedByField.update(with: item as? String)
         case .status:
             self.statusField.update(with: item as? String)
-        case .type:
-            self.typeField.update(with: item as? String)
         }
     }
 }
@@ -231,7 +217,7 @@ extension Optional where Wrapped == String {
 
 
 enum SelectableField: String {
-    case organized, status, type
+    case organized, status
     
     var options: [String] {
         switch self {
@@ -239,8 +225,6 @@ enum SelectableField: String {
             return ComicOrganizedBy.allValues
         case .status:
             return  ComicStatus.allValues
-        case .type:
-            return ["Quadrinho", "Livro", "Mangá"]
         }
     }
 }

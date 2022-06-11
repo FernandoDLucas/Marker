@@ -10,20 +10,28 @@ import NetworkingKit
 
 public protocol EditItemViewModelProtocol {
     func saveItem(_ item: ComicDTO) throws
+    func retrieveObject() -> Comic?
 }
 
 final class EditItemViewModel: EditItemViewModelProtocol{
     
     private let repository: NKComicRepositoryProtocol
+    private let comic: Comic?
     
     init(
-        repository: NKComicRepositoryProtocol
+        repository: NKComicRepositoryProtocol,
+        comic: Comic? = nil 
     ) {
         self.repository = repository
+        self.comic = comic
     }
     
     func saveItem(_ item: ComicDTO) throws {
         let _ = try repository.create(item)
+    }
+    
+    func retrieveObject() -> Comic? {
+        self.comic
     }
 }
 

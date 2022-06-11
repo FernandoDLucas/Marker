@@ -38,11 +38,11 @@ public final class DKTextField: UIView {
     }
     
     public init(
-        viewModel: DSTextFieldViewModel
+        title: String
     ) {
         super.init(frame: .zero)
         self.backgroundColor = .systemBackground
-        configure(with: viewModel)
+        configure(with: title)
         setupView()
     }
     
@@ -51,8 +51,8 @@ public final class DKTextField: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(with viewModel: DSTextFieldViewModel) {
-        self.label.text = viewModel.title
+    public func configure(with title: String) {
+        self.label.text = title
     }
 }
 
@@ -62,7 +62,7 @@ extension DKTextField: ViewCode {
             label,
             textField
         ])
-        self.addBottomBorder(of: 1)
+        self.addBottomBorder(of: 0.7)
     }
     
     public func setupConstraints() {
@@ -80,15 +80,5 @@ extension DKTextField: ViewCode {
         textField.anchorToVerticalEdges(of: self)
         textField.anchorToTrailing(of: self)
         textField.anchorWidth(basedOn: self, withSize: 0.6)
-    }
-}
-
-public struct DSTextFieldViewModel {
-    public let title: String
-    
-    public init(
-        title: String
-     ) {
-        self.title = title
     }
 }

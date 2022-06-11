@@ -42,7 +42,7 @@ final class EditItemViewController: UIViewController, EditItemViewControllerProt
     
     override func viewDidLoad() {
         customView.navigationItem = self.navigationItem
-        customView.configure()
+        customView.configureNavigation()
         addChildPickerView()
     }
     
@@ -51,8 +51,7 @@ final class EditItemViewController: UIViewController, EditItemViewControllerProt
     }
     
     func addChildPickerView() {
-        let child = DKImagePicker()
-        child.delegate = customView
+        let child = customView.imagePicker
         addChild(child)
         view.addSubview(child.view)
         child.view.anchorToHorizontalEdges(of: self.view, withSpace: 17)

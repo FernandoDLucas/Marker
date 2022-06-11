@@ -13,10 +13,13 @@ import Strategy
 import NetworkingKit
 
 protocol ShelfViewProtocol: UIView {
+    var delegate: ShelfViewDelegate? { get set }
     func update()
 }
 
-protocol ShelfViewDelegate: AnyObject {}
+protocol ShelfViewDelegate: AnyObject {
+    func didSelectCellWithObjec(object: Comic)
+}
 
 final class ShelfView: UIView, ShelfViewProtocol {
     
@@ -80,6 +83,10 @@ extension ShelfView: ViewCode {
 }
 
 extension ShelfView: ShelfCollectionViewModelDelegate {
+    func didSelectCellWithObjec(object: Comic) {
+        delegate?.didSelectCellWithObjec(object: object)
+    }
+    
     func handleUpdate() {
         self.collectionView.reloadData()
     }

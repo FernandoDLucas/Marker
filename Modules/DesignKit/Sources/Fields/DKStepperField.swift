@@ -63,7 +63,7 @@ extension DKStepperField: ViewCode {
             label,
             stepper
         ])
-        self.addBottomBorder(of: 1)
+        self.addBottomBorder(of: 0.7)
     }
     
     public func setupConstraints() {

@@ -35,7 +35,7 @@ public final class DKSelectorField: UIView {
     
     private lazy var identifierLabel: UILabel = {
        let label = UILabel()
-        label.font = .systemFont(ofSize: 15, weight: .semibold)
+        label.font = .systemFont(ofSize: 14, weight: .semibold)
         label.adjustsFontSizeToFitWidth = true
         return label
     }()
@@ -85,7 +85,7 @@ extension DKSelectorField: ViewCode {
             valueLabel,
             imageAcessory
         ])
-        self.addBottomBorder(of: 1)
+        self.addBottomBorder(of: 0.7)
     }
     
     public func setupConstraints() {

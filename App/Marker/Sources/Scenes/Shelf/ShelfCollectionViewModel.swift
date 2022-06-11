@@ -11,7 +11,8 @@ import NetworkingKit
 import UIKit
 
 protocol ShelfCollectionViewModelDelegate: AnyObject {
-    func handleUpdate() 
+    func handleUpdate()
+    func didSelectCellWithObjec(object: Comic)
 }
 protocol ShelfCollectionViewModelProtocol: CollectionViewModelProtocol {
     var delegate: ShelfCollectionViewModelDelegate? { get set }
@@ -50,11 +51,17 @@ final class ShelfCollectionViewModel: NSObject, ShelfCollectionViewModelProtocol
 }
 
 extension ShelfCollectionViewModel: UICollectionViewDelegate, UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        numberOfItemsInSection section: Int
+    ) -> Int {
         return comics.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ShelfCollectionViewCell.reuseIdentifier, for: indexPath) as? ShelfCollectionViewCell else {
             return UICollectionViewCell()
         }
@@ -64,4 +71,11 @@ extension ShelfCollectionViewModel: UICollectionViewDelegate, UICollectionViewDa
         return cell
     }
     
+    func collectionView(
+        _ collectionView: UICollectionView,
+        didSelectItemAt indexPath: IndexPath
+    ) {
+        let comic = comics[indexPath.row]
+        delegate?.didSelectCellWithObjec(object: comic)
+    }
 }

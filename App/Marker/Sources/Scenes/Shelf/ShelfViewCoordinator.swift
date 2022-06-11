@@ -11,7 +11,7 @@ import UIKit
 import NetworkingKit
 
 protocol ShelfViewCoordinatorProtocol{
-    func callAddScreen()
+    func callEditScreen(object: Comic?)
     func callSelectItemScreen(
         itens: [Any?],
         identifier: SelectableField
@@ -31,9 +31,9 @@ public final class ShelfViewCoordinator: ShelfViewCoordinatorProtocol {
 
     init() {}
 
-    func callAddScreen() {
+    func callEditScreen(object: Comic?) {
         let repository = NKLocalPersistenceResolver().createComicRepository()
-        let viewModel = EditItemViewModel(repository: repository)
+        let viewModel = EditItemViewModel(repository: repository, comic: object)
         let view = EditItemView(viewModel: viewModel)
         let controller = EditItemViewController(view: view, coordinator: self)
         view.delegate = controller
