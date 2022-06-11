@@ -17,6 +17,10 @@ public protocol NKComicRepositoryProtocol {
     func retrieve(
         status: ComicStatus
     ) throws -> [Comic]
+    
+    func delete(
+        _ comic: Comic
+    ) throws -> Comic
 }
 
 public final class NKComicRepository: NKComicRepositoryProtocol{
@@ -61,5 +65,11 @@ public final class NKComicRepository: NKComicRepositoryProtocol{
     ) throws -> [Comic] {
         let keySearch = SearchByStatus(status: status)
         return try service.retrive(keySearch)
+    }
+    
+    public func delete(
+        _ comic: Comic
+    ) throws -> Comic {
+        try service.deleteObject(comic)
     }
 }

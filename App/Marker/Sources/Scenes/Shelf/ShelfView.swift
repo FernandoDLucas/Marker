@@ -28,17 +28,21 @@ final class ShelfView: UIView, ShelfViewProtocol {
         segmentedControl.addTarget(self, action: #selector(segmentedControlValueChanged), for: .valueChanged)
         return segmentedControl
     }()
+
     private let viewModel: ShelfCollectionViewModelProtocol
-    private let collectionView = ShelfCollectionView()
+    private let collectionView: ShelfCollectionViewProtocol
     weak var navigationItem: UINavigationItem?
     weak var delegate: ShelfViewDelegate?
 
     init(
-        ViewModel: ShelfCollectionViewModelProtocol
+        ViewModel: ShelfCollectionViewModelProtocol,
+        collectionView: ShelfCollectionViewProtocol = ShelfCollectionView()
     ) {
         self.viewModel = ViewModel
+        self.collectionView = collectionView
         super.init(frame: .zero)
         setupView()
+        setupActions()
         self.viewModel.delegate = self
         collectionView.delegate = self.viewModel
         collectionView.dataSource = self.viewModel
@@ -74,11 +78,26 @@ extension ShelfView: ViewCode {
         collectionView.anchorToBottom(of: self.safeAreaLayoutGuide)
     }
     
+    func setupActions() {
+        self.addLongPressAction(on: self, execute: #selector(didPerformLongPress))
+        self.addTapAction(on: self, execute:  #selector(didPerformTap))
+    }
+    
     @objc
     func segmentedControlValueChanged(_ sender: UISegmentedControl) {
         segmentedControl.indexChanged(newIndex: sender.selectedSegmentIndex)
         let status = ComicStatus.getCaseInIndex(sender.selectedSegmentIndex)
         viewModel.fetch(status: status)
+    }
+    
+    @objc
+    func didPerformLongPress() {
+        collectionView.presentEditMode()
+    }
+    
+    @objc
+    func didPerformTap() {
+        collectionView.removeEditMode()
     }
 }
 
@@ -89,30 +108,5 @@ extension ShelfView: ShelfCollectionViewModelDelegate {
     
     func handleUpdate() {
         self.collectionView.reloadData()
-    }
-}
-
-extension UIViewController {
-    public func setupNavigationBar(
-        title: String? = nil,
-        navColor: UIColor?,
-        barColor: UIColor?
-    ) {
-        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
-        navigationController?.navigationBar.shadowImage = UIImage()
-        navigationController?.navigationBar.isTranslucent = false
-
-            let appearance = UINavigationBarAppearance()
-            appearance.configureWithOpaqueBackground()
-            appearance.backgroundColor = navColor
-            appearance.shadowImage = UIImage()
-            appearance.shadowColor = .clear
-
-            appearance.titleTextAttributes = [
-                .foregroundColor: barColor as Any
-            ]
-
-        navigationController?.navigationBar.standardAppearance = appearance
-        navigationController?.navigationBar.scrollEdgeAppearance = appearance
     }
 }

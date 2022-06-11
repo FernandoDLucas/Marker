@@ -48,6 +48,14 @@ final class ShelfCollectionViewModel: NSObject, ShelfCollectionViewModelProtocol
         self.comics = comics
         delegate?.handleUpdate()
     }
+    
+    func delete(comic: Comic) {
+        try? repository.delete(comic)
+        comics.removeAll {
+            $0 == comic
+        }
+        delegate?.handleUpdate()
+    }
 }
 
 extension ShelfCollectionViewModel: UICollectionViewDelegate, UICollectionViewDataSource {
@@ -75,7 +83,14 @@ extension ShelfCollectionViewModel: UICollectionViewDelegate, UICollectionViewDa
         _ collectionView: UICollectionView,
         didSelectItemAt indexPath: IndexPath
     ) {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ShelfCollectionViewCell.reuseIdentifier, for: indexPath) as? ShelfCollectionViewCell else {
+            return
+        }
         let comic = comics[indexPath.row]
-        delegate?.didSelectCellWithObjec(object: comic)
+        if cell.isPresentingEditMode {
+            delete(comic: comic)
+        } else {
+            delegate?.didSelectCellWithObjec(object: comic)
+        }
     }
 }
