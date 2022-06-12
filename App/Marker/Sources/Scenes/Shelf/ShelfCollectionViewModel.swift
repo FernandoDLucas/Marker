@@ -14,7 +14,7 @@ protocol ShelfCollectionViewModelDelegate: AnyObject {
     func handleUpdate()
     func didSelectCellWithObjec(object: Comic)
 }
-protocol ShelfCollectionViewModelProtocol: CollectionViewModelProtocol {
+protocol ShelfCollectionViewModelProtocol: CollectionViewModelProtocol, UISearchResultsUpdating, UISearchControllerDelegate {
     var delegate: ShelfCollectionViewModelDelegate? { get set }
     func initialFetch()
     func fetch(status: ComicStatus)
@@ -24,6 +24,13 @@ final class ShelfCollectionViewModel: NSObject, ShelfCollectionViewModelProtocol
     
     private let repository: NKComicRepositoryProtocol
     private var comics: [Comic] = []
+    private var filteredComics: [Comic] = []
+    private var collectionData: [Comic] {
+        get {
+            if searchActivate { return filteredComics } else { return comics }
+        }
+    }
+    private var searchActivate: Bool = false
     weak var delegate: ShelfCollectionViewModelDelegate? = nil
 
     init(
@@ -63,7 +70,7 @@ extension ShelfCollectionViewModel: UICollectionViewDelegate, UICollectionViewDa
         _ collectionView: UICollectionView,
         numberOfItemsInSection section: Int
     ) -> Int {
-        return comics.count
+        return collectionData.count
     }
     
     func collectionView(
@@ -73,7 +80,7 @@ extension ShelfCollectionViewModel: UICollectionViewDelegate, UICollectionViewDa
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ShelfCollectionViewCell.reuseIdentifier, for: indexPath) as? ShelfCollectionViewCell else {
             return UICollectionViewCell()
         }
-        let data = comics[indexPath.row].cover
+        let data = collectionData[indexPath.row].cover
         let image = UIImage(data: data ?? Data())
         cell.configure(with: image)
         return cell
@@ -86,11 +93,29 @@ extension ShelfCollectionViewModel: UICollectionViewDelegate, UICollectionViewDa
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ShelfCollectionViewCell.reuseIdentifier, for: indexPath) as? ShelfCollectionViewCell else {
             return
         }
-        let comic = comics[indexPath.row]
+        let comic = collectionData[indexPath.row]
         if cell.isPresentingEditMode {
             delete(comic: comic)
         } else {
             delegate?.didSelectCellWithObjec(object: comic)
         }
+    }
+}
+
+extension ShelfCollectionViewModel: UISearchResultsUpdating, UISearchControllerDelegate {
+    func updateSearchResults(for searchController: UISearchController) {
+        guard let text = searchController.searchBar.text, !text.isEmpty else { return }
+        filteredComics = comics.filter{
+            return $0.title.range(of: text, options: .caseInsensitive) != nil
+        }
+        delegate?.handleUpdate()
+    }
+    
+    func willPresentSearchController(_ searchController: UISearchController) {
+        searchActivate = true
+    }
+    
+    func willDismissSearchController(_ searchController: UISearchController) {
+        searchActivate = false
     }
 }

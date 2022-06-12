@@ -13,8 +13,10 @@ import Strategy
 import NetworkingKit
 
 protocol ShelfViewProtocol: UIView {
+    var navigationItem: UINavigationItem? { get set }
     var delegate: ShelfViewDelegate? { get set }
     func update()
+    func configure()
 }
 
 protocol ShelfViewDelegate: AnyObject {
@@ -28,7 +30,8 @@ final class ShelfView: UIView, ShelfViewProtocol {
         segmentedControl.addTarget(self, action: #selector(segmentedControlValueChanged), for: .valueChanged)
         return segmentedControl
     }()
-
+    
+    private let searchController = UISearchController()
     private let viewModel: ShelfCollectionViewModelProtocol
     private let collectionView: ShelfCollectionViewProtocol
     weak var navigationItem: UINavigationItem?
@@ -46,6 +49,8 @@ final class ShelfView: UIView, ShelfViewProtocol {
         self.viewModel.delegate = self
         collectionView.delegate = self.viewModel
         collectionView.dataSource = self.viewModel
+        searchController.searchResultsUpdater = self.viewModel
+        searchController.delegate = self.viewModel
     }
     
     required init?(coder: NSCoder) {
@@ -55,6 +60,10 @@ final class ShelfView: UIView, ShelfViewProtocol {
     func update() {
         let status = ComicStatus.getCaseInIndex(segmentedControl.selectedSegmentIndex)
         viewModel.fetch(status: status)
+    }
+    
+    func configure() {
+        navigationItem?.searchController = searchController
     }
 }
 

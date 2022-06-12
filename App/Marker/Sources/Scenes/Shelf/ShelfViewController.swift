@@ -45,7 +45,9 @@ class ShelfViewController: UIViewController,ShelfViewControllerProtocol {
             target: self,
             action: #selector(callAdd)
         )
+        customView.navigationItem = navigationItem
         customView.update()
+        customView.configure()
     }
     
     override func viewWillAppear(_ animated: Bool) {
